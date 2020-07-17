@@ -5,17 +5,15 @@ export default styled.main`
   flex-direction: column;
   align-items: center;
   width: 400px;
-  margin: 0 auto;
+  margin:0 auto;
 
-  .sign-in-title {}
-
-  .sign-in-form {
+  .sign-up-form {
     width: 100%;
   }
 
-  .help-links {
-    display: flex;
-    justify-content: space-between;
+  .sign-up-link{
+    display: block;
     margin-top: 10px;
+    text-align: center;
   }
 `;

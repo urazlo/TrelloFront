@@ -1,35 +1,54 @@
 import React from 'react';
-import styled from 'styled-components';
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
-import SignIn from './SignIn';
+import StyledPage from 'pages/SignUp/components/StyledPage';
+import { signUp } from '../../api/authApi';
 
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      test: 'test',
+      login: '',
+      email: '',
+      password: '',
     };
   }
 
+  onLoginChange = (ev) => {
+    this.setState({ login: ev.target.value });
+  }
+
+  onEmailChange = (ev) => {
+    this.setState({ email: ev.target.value });
+  }
+
+  onPasswordChange = (ev) => {
+    this.setState({ password: ev.target.value });
+  }
+
+  onSubmit = (ev) => {
+    ev.preventDefault();
+    const { login, email, password } = this.state;
+    signUp({ login, email, password });
+  }
+
   render() {
-
     return (
-      <StyledSignUp>
-        <h1>Sign up</h1>
+      <StyledPage>
 
-        <form className="sign-up-form">
+        <h1>Sign Up</h1>
+
+        <form
+          className="sign-up-form"
+          onSubmit={this.onSubmit}
+          onChange={this.onHandleChange}
+        >
 
           <TextField
+            onChange={this.onLoginChange}
             name="login"
             margin="normal"
             variant="outlined"
@@ -41,6 +60,7 @@ class SignUp extends React.Component {
           />
 
           <TextField
+            onChange={this.onEmailChange}
             margin="normal"
             variant="outlined"
             required
@@ -51,6 +71,7 @@ class SignUp extends React.Component {
           />
 
           <TextField
+            onChange={this.onPasswordChange}
             margin="normal"
             variant="outlined"
             required
@@ -70,31 +91,13 @@ class SignUp extends React.Component {
             Sign Up
           </Button>
 
-          <Link to="/sign-in" className="sign-up-link">
+          <Link to="/auth/sign-in" className="sign-up-link">
             Already have an account? Sign in
           </Link>
         </form>
-      </StyledSignUp>
+      </StyledPage>
     );
   }
 }
-
-const StyledSignUp = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width:400px;
-  margin:0 auto;
-
-.sign-up-form {
-  width: 100%;
-}
-
-.sign-up-link{
-  display:block;
-  margin-top:10px;
-  text-align:center;
-}
-`;
 
 export default SignUp;

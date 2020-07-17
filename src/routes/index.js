@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 
-import auth from "./auth";
+import auth from './auth';
 
 const Router = () => {
   return (
@@ -15,15 +15,15 @@ const Router = () => {
       ))}
     </Switch>
   );
-}
+};
 
 const routes = [
   ...auth,
   {
     path: '/',
     component: () => '404',
-    exact: false
-  }
+    exact: false,
+  },
 ];
 
 export default Router;

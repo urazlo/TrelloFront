@@ -10,9 +10,9 @@ class RestorePass extends React.Component {
   }
 
   render() {
-
     return (
       <>
+        {this.state.test}
       </>
     );
   }

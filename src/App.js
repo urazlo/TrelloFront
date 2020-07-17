@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Link } from "react-router-dom";
-import Router from "routes";
+import { Link } from 'react-router-dom';
+import Router from 'routes';
 
 class App extends React.Component {
   state = {
@@ -17,11 +17,11 @@ class App extends React.Component {
           </li>
 
           <li>
-            <Link to="/sign-in">sign-in</Link>
+            <Link to="/auth/sign-in">sign-in</Link>
           </li>
-
+          {this.state.test}
           <li>
-            <Link to="/sign-up">sign-up</Link>
+            <Link to="/auth/sign-up">sign-up</Link>
           </li>
         </ul>
 
