@@ -11,17 +11,20 @@ class App extends React.Component {
   render() {
     return (
       <>
+
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">{this.state.test}</Link>
           </li>
 
           <li>
             <Link to="/auth/sign-in">sign-in</Link>
           </li>
-          {this.state.test}
           <li>
             <Link to="/auth/sign-up">sign-up</Link>
+          </li>
+          <li>
+            <Link to="/boarders-list">boarders-list</Link>
           </li>
         </ul>
 

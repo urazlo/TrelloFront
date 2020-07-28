@@ -1,15 +1,20 @@
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
-import Board from 'pages/Board';
-
+// import Board from 'pages/Board';
+import BoardersList from 'pages/BoardersList';
 import RestorePass from 'pages/RestorePass';
 
 export default [
   {
-    path: '/b',
-    component: Board,
+    path: '/boarders-list',
+    component: BoardersList,
     exact: true,
   },
+  // {
+  //   path: '/board',
+  //   component: Board,
+  //   exact: true,
+  // },
   {
     path: '/auth/sign-in',
     component: SignIn,
