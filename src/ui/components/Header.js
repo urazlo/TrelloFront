@@ -4,7 +4,11 @@ import HeaderStyle from 'styles/HeaderStyle';
 
 class Header extends React.Component {
   state = {
-    test: 'board',
+    value: '',
+  }
+
+  onChangeHandler = (e) => {
+    this.setState({ value: e.target.value });
   }
 
   render() {
@@ -25,7 +29,8 @@ class Header extends React.Component {
               spellCheck="false"
               className="search-text-area"
               type="search"
-              value={this.state.test}
+              value={this.state.value}
+              onChange={this.onChangeHandler}
             />
 
             <button className="header-search-button header--button"></button>

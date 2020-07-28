@@ -1,6 +1,6 @@
 import { boardsStorageKey } from './constants';
 
-export const getTaskId = () => {
+export const getBoardId = () => {
   return Math.random().toString(36).substr(2, 9);
 };
 

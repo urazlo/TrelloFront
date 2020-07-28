@@ -2,6 +2,8 @@ import React from 'react';
 
 import StyledPage from 'pages/BoardersList/components/StyledPage';
 import Header from 'ui/components/Header';
+import { boardsStorage, getBoardId } from 'utils';
+import Board from 'pages/Board';
 
 // componentDidMount() {
 //   window.addEventListener('keydown', this.escapeListener);
@@ -38,31 +40,38 @@ class BorderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 'title',
-      tasks: [],
+      value: '',
+      boards: boardsStorage.get(),
     };
   }
 
-  addTask = () => {
-    const { tasks, value } = this.state;
+  updateLocalStorage = () => {
+    boardsStorage.set(this.state.boards);
+  }
+
+  addBoard = () => {
+    const { boards, value } = this.state;
 
     if (value.trim()) {
-      const task = {
-        // id: getTaskId(),
+      const board = {
+        id: getBoardId(),
         title: value.trim(),
-        isDone: false,
       };
 
       this.setState({
-        tasks: [...tasks, task],
+        boards: [...boards, board],
         value: '',
       }, this.updateLocalStorage);
     }
   }
 
-  onEdit = (e) => {
+  onChangeHandler = (e) => {
     this.setState({ value: e.target.value });
   }
+
+  handleEnter = (e) => {
+    if (e.key === 'Enter') { this.addBoard(); }
+  };
 
   // onInputKeyDown = (e) => {
   //   if (e.key === 'Enter') {
@@ -80,11 +89,12 @@ class BorderList extends React.Component {
   //   e.stopPropagation();
   // }
 
-  clickHandler = () => {
-    this.props.changeEditableTaskId(this.props.id);
-  }
+  // clickHandler = () => {
+  //   this.props.changeEditableTaskId(this.props.id);
+  // }
 
   render() {
+    const { boards } = this.state;
     return (
       <>
         <Header />
@@ -100,23 +110,29 @@ class BorderList extends React.Component {
             </div>
 
             <ul className="boards-page-board-section-list">
+
+              {boards.map(({ id, title }) => (
+                <Board
+                  key={id}
+                  id={id}
+                  title={title}
+                // editableTaskId={this.state.editableTaskId}
+                // editTask={editTask}
+                // deleteTask={deleteTask}
+                // toggleTask={toggleTask}
+                // changeEditableTaskId={this.changeEditableTaskId}
+                />
+              ))}
+
               <li className="boards-page-board-section-list-item">
 
-                <a className="board-title" href="#/">
-                  <span>Юрий Гончарук</span>
-                </a>
-
-              </li>
-
-              <li className="boards-page-board-section-list-item">
                 <input
                   placeholder="Создать доску"
-                  className="edit"
+                  className="add-board"
                   autoFocus
                   value={this.state.value}
-                  // onKeyDown={this.onInputKeyDown}
-                  onChange={this.onEdit}
-                  onClick={this.clickHandler}
+                  onKeyPress={this.handleEnter}
+                  onChange={this.onChangeHandler}
                 />
               </li>
             </ul>
