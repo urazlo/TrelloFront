@@ -1,6 +1,7 @@
 import React from 'react';
 
-import HeaderStyle from 'styles/HeaderStyle';
+import { Link } from 'react-router-dom';
+import HeaderStyle from 'styles/HeaderStyles';
 
 class Header extends React.Component {
   state = {
@@ -17,34 +18,63 @@ class Header extends React.Component {
 
         <div className="header-left-side">
 
-          <button className="header-home-button header--button"></button>
+          <div>
+            <button
+              className="header-button"
+            >
+              <Link className="header-button-text" to="/">H</Link>
+            </button>
+          </div>
 
-          <button className="header-border-list-button header--button"></button>
+          <div>
+            <button
+              className="header-button"
+            >
+              <span className="header-button-text">B</span>
+            </button>
+          </div>
 
-          <div className="header-search">
-
+          <div className="header-search-field">
             <input
               autoComplete="off"
               autoCorrect="off"
               spellCheck="false"
-              className="search-text-area"
+              className="header-search-field"
               type="search"
               value={this.state.value}
               onChange={this.onChangeHandler}
             />
-
-            <button className="header-search-button header--button"></button>
+            <span className="">
+              <label>
+                <span className="   "
+                  name="search"
+                >
+                </span>
+              </label>
+            </span>
           </div>
 
         </div>
 
-        <div className="header-logo"></div>
+        <Link className="header-logo" to="/"></Link>
 
         <div className="header-right-side">
 
-          <button className="header-create-board-button header--button"></button>
+          <div>
+            <button
+              className="header-button"
+            >
+              <span className="header-button-text">+</span>
+            </button>
+          </div>
 
-          <div className="user-profile-button header--button"> </div>
+          <div>
+            <button
+              className="header-button"
+            >
+              <span className="header-button-text">P</span>
+            </button>
+          </div>
 
         </div>
 

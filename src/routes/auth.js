@@ -1,13 +1,20 @@
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
 // import Board from 'pages/Board';
-import BoardersList from 'pages/BoardersList';
+import App from 'App';
+
+import Home from 'pages/Home';
 import RestorePass from 'pages/RestorePass';
 
 export default [
   {
-    path: '/boarders-list',
-    component: BoardersList,
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+  {
+    path: '/start',
+    component: App,
     exact: true,
   },
   // {

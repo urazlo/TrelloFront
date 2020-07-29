@@ -5,31 +5,28 @@ import Router from 'routes';
 
 class App extends React.Component {
   state = {
-    test: 'test',
+    test: 'home',
   }
 
   render() {
     return (
-      <>
-
+      <div className="start-page">
         <ul>
-          <li>
-            <Link to="/">{this.state.test}</Link>
-          </li>
-
           <li>
             <Link to="/auth/sign-in">sign-in</Link>
           </li>
+
           <li>
             <Link to="/auth/sign-up">sign-up</Link>
           </li>
+
           <li>
-            <Link to="/boarders-list">boarders-list</Link>
+            <Link to="/">{this.state.test}</Link>
           </li>
         </ul>
 
         <Router />
-      </>
+      </div>
     );
   }
 }

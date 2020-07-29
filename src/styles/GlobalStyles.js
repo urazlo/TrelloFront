@@ -8,4 +8,12 @@ body, html {
     font-weight: 400;
     margin:0 auto;
 }
+
+button {
+  border: 0;
+  padding: 0;
+  background: none;
+  outline:none;
+  font-size: 100%;
+}
 `;

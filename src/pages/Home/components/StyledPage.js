@@ -6,48 +6,64 @@ export default styled.div`
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-    background: greenyellow;
+    background: #fff;
     
   .all-boards{
     display:flex;
+    flex-direction:column;
   }
 
-  .boards-page-board-section-header-name{
-    display: inline-block;
+  .boards-page-board-section-header{
+    display:inline-block;
     line-height: 24px;
-    margin: 4px 0;
-    font-size: 16px;
+    margin: 20px auto;
+    font-size: 25px;
     font-weight: 700;
     overflow: hidden;
   }
 
   .boards-page-board-section-list{
     height: 50%;
+    width: 800px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     flex: 1 1 0%;
-    margin: 0px auto;
+    margin: 0 auto;
   }
 
-  .boards-page-board-section-list-item{
-    height: 200px;
-    width: 200px;
+  .boards-page-board-section-add-item{
+    height: 100px;
+    width: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: grey 0px 2px 4px;
-    background: #a7a76ffa;
     padding: 10px;
     margin: 8px;
-    border-radius: 3px;
+    box-shadow: 0 1px 4px grey;
+    background: rgba(18, 167, 216, 0.308);
+    
+    &:hover{
+    background-color: rgba(18, 167, 216, 0.408);
 }
+  }
+
+  .add-board-input{
+  width:150px;
+  }
 
   ul{
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  input{
+    background: none;
+    border:none;
+    font-size:20px;
+    outline: none;
   }
 `;

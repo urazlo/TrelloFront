@@ -1,6 +1,6 @@
 import React from 'react';
 
-import StyledPage from 'pages/BoardersList/components/StyledPage';
+import StyledPage from 'pages/Home/components/StyledPage';
 import Header from 'ui/components/Header';
 import { boardsStorage, getBoardId } from 'utils';
 import Board from 'pages/Board';
@@ -73,26 +73,6 @@ class BorderList extends React.Component {
     if (e.key === 'Enter') { this.addBoard(); }
   };
 
-  // onInputKeyDown = (e) => {
-  //   if (e.key === 'Enter') {
-  //     this.props.editTask(this.props.id, this.state.changedTitle);
-  //     this.props.changeEditableTaskId(null);
-  //   }
-
-  //   if (e.key === 'Escape') {
-  //     this.setState({ changedTitle: this.props.title });
-  //     this.props.changeEditableTaskId(null);
-  //   }
-  // }
-
-  // clickBlocker = (e) => {
-  //   e.stopPropagation();
-  // }
-
-  // clickHandler = () => {
-  //   this.props.changeEditableTaskId(this.props.id);
-  // }
-
   render() {
     const { boards } = this.state;
     return (
@@ -103,10 +83,7 @@ class BorderList extends React.Component {
           <div className="all-boards">
 
             <div className="boards-page-board-section-header">
-
-              <span className="boards-page-board-section-header-name">
-                Персональные доски
-              </span>
+              Персональные доски
             </div>
 
             <ul className="boards-page-board-section-list">
@@ -116,19 +93,14 @@ class BorderList extends React.Component {
                   key={id}
                   id={id}
                   title={title}
-                // editableTaskId={this.state.editableTaskId}
-                // editTask={editTask}
-                // deleteTask={deleteTask}
-                // toggleTask={toggleTask}
-                // changeEditableTaskId={this.changeEditableTaskId}
                 />
               ))}
 
-              <li className="boards-page-board-section-list-item">
+              <li className="boards-page-board-section-add-item">
 
                 <input
+                  className="add-board-input"
                   placeholder="Создать доску"
-                  className="add-board"
                   autoFocus
                   value={this.state.value}
                   onKeyPress={this.handleEnter}
