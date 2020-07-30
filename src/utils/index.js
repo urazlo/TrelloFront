@@ -1,4 +1,4 @@
-import { boardsStorageKey, columnsStorageKey } from './constants';
+import { boardsStorageKey, columnsStorageKey, cardsStorageKey } from './constants';
 
 export const getBoardId = () => {
   return Math.random().toString(36).substr(2, 9);
@@ -33,5 +33,23 @@ export const columnsStorage = {
 
   set: (column) => {
     localStorage.setItem(columnsStorageKey, JSON.stringify(column));
+  },
+};
+
+export const getCardId = () => {
+  return Math.random().toString(36).substr(2, 9);
+};
+
+export const cardsStorage = {
+  get: () => {
+    try {
+      return JSON.parse(localStorage.getItem(cardsStorageKey)) || [];
+    } catch (error) {
+      return [];
+    }
+  },
+
+  set: (card) => {
+    localStorage.setItem(cardsStorageKey, JSON.stringify(card));
   },
 };

@@ -1,102 +1,131 @@
 import React from 'react';
 
 import styled from 'styled-components';
-// import { columnsStorage, getColumnId } from 'utils';
+
+import { cardsStorage, getCardId } from 'utils';
+
+import Card from 'ui/components/Card';
 
 class Column extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
-      // cards: cardsStorage.get(),
+      value: '',
+      cards: cardsStorage.get(),
     };
   }
 
-  // updateLocalStorage = () => {
-  //   columnsStorage.set(this.state.columns);
-  // }
+  updateLocalStorage = () => {
+    cardsStorage.set(this.state.cards);
+  }
 
-  // addColumn = () => {
-  //   const { columns, title } = this.state;
+  addCard = () => {
+    const { cards, title } = this.state;
 
-  //   if (title.trim()) {
-  //     const column = {
-  //       id: getColumnId(),
-  //       title: title.trim(),
-  //     };
+    if (title.trim()) {
+      const card = {
+        id: getCardId(),
+        title: title.trim(),
+      };
 
-  //     this.setState({
-  //       columns: [...columns, column],
-  //       title: '',
-  //     }, this.updateLocalStorage);
-  //   }
-  // }
+      this.setState({
+        cards: [...cards, card],
+        title: '',
+      }, this.updateLocalStorage);
+    }
+  }
 
-  // onChangeHandler = (e) => {
-  //   this.setState({ title: e.target.title });
-  // }
+  onChangeHandler = (e) => {
+    this.setState({ title: e.target.value });
+  }
 
-  // handleEnter = (e) => {
-  //   if (e.key === 'Enter') { this.addColumn(); }
-  // };
+  handleEnter = (e) => {
+    if (e.key === 'Enter') { this.addCard(); }
+  };
 
   render() {
+    const { cards, title, value } = this.state;
+
     return (
       <StyledPage>
 
         <div className="column-item-wrapper">
 
           <div className="column-item">
-            <div
-              className="column-item-header"
-            >
-              <span className="column-item-header-title">{this.state.title}</span>
+
+            <div className="column-item-header">
+
+              <span className="column-item-header-title">{this.props.columnTitle}</span>
 
               <input
-                className="column-item-header-title-edit hidden"
-                value={this.state.changedTitle}
-                onChange={this.onChangeColumnTitleHandler}
+                className="column-item-header-title-edit"
+                value={value}
+                onChange={this.onChangeHandler}
               />
 
               <button
                 className="column-item-header-menu"
               >
                 ...
-</button>
+              </button>
+
             </div>
+
             <div className="list-cards">
 
-              <div className="list card">
+              {cards.map(({ id, title }) => (
+                <Card
+                  key={id}
+                  id={id}
+                  cardTitle={title}
+                />
+              ))}
 
-                <div className="card-details">
+            </div>
 
-                  <span className="card-details-title">{this.state.cardTitle}</span>
+            <div className="column-item-footer">
 
-                  <input
-                    className="card-details-edit hidden"
-                    value={this.state.cardTitle}
-                    onChange={this.onChangeCardTitleHandler}
-                  />
-                </div>
+              <div className="add-list column-item-wrapper">
 
-              </div>
-              <div className="column-item-footer">
+                <button className="open-add-list">
+
+                  <span className="placeholder">
+                    + Добавьте еще одну карточку
+                  </span>
+
+                </button>
+
+                <input
+                  className="list-name-input"
+                  placeholder="Ввести заголовок карточки"
+                  autoComplete="off"
+                  dir="auto"
+                  value={title}
+                  onKeyPress={this.handleEnter}
+                  onChange={this.onChangeHandler}
+                />
 
                 <div className="column-item-add-card">
 
-                  <button
-                    className="add-card-button"
-                  >
-                    +
-      </button>
+                  <button className="add-card-button">
+                    Добавить список
+                  </button>
+
+                  <button className="cancel-edit">
+                    Х
+                  </button>
 
                 </div>
 
               </div>
 
             </div>
+
           </div>
+
         </div>
+
       </StyledPage>
     );
   }

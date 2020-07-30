@@ -1,82 +1,105 @@
 import React from 'react';
 
 import StyledPage from 'pages/UserBoard/components/StyledPage';
+import { columnsStorage, getColumnId } from 'utils';
+
 import Header from 'ui/components/Header';
 import Column from 'ui/components/Column';
 
 class UserBoard extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      // changedTitle: '123',
-      // cardTitle: '321',
+      title: '',
+      columns: columnsStorage.get(),
     };
   }
 
-  // onChangeColumnTitleHandler = (e) => {
-  //   this.setState({ changedTitle: e.target.value });
-  // }
+  updateLocalStorage = () => {
+    columnsStorage.set(this.state.columns);
+  }
 
-  // onChangeCardTitleHandler = (e) => {
-  //   this.setState({ cardTitle: e.target.value });
-  // }
+  addColumn = () => {
+    const { columns, title } = this.state;
+
+    if (title.trim()) {
+      const column = {
+        id: getColumnId(),
+        title: title.trim(),
+      };
+
+      this.setState({
+        columns: [...columns, column],
+        title: '',
+      }, this.updateLocalStorage);
+    }
+  }
+
+  onChangeHandler = (e) => {
+    this.setState({ title: e.target.value });
+  }
+
+  handleEnter = (e) => {
+    if (e.key === 'Enter') { this.addColumn(); }
+  };
 
   render() {
-    const { columns } = this.state;
+    const { columns, title } = this.state;
 
     return (
       <>
+
         <Header />
+
         <StyledPage>
 
-          <div className="boards-page-board-section-list">
+          <div className="column-item-wrapper">
 
             {columns.map(({ id, title }) => (
               <Column
                 key={id}
-                id={id}
-                title={title}
+                columnId={id}
+                columnTitle={title}
               />
             ))}
-
-            <div className="add-list column-item-wrapper">
-
-              <form>
-
-                <button className="open-add-list js-open-add-list">
-
-                  <span className="placeholder">
-                    + Добавьте еще одну колонку
-                </span>
-
-                </button>
-
-                <input
-                  className="list-name-input"
-                  placeholder="Ввести заголовок списка"
-                  autoComplete="off"
-                  dir="auto"
-                />
-
-                <div className="list-add-controls u-clearfix">
-
-                  <input
-                    className="primary mod-list-add-button js-save-edit"
-                    type="submit"
-                    value="Добавить список"
-                  />
-
-                  <button
-                    className="icon-lg icon-close js-cancel-edit"
-                  >
-                    X
-                </button>
-                </div>
-              </form>
-            </div>
           </div>
+
+          <div className="add-list column-item-wrapper">
+
+            <button className="open-add-list">
+
+              <span className="placeholder">
+                + Добавьте еще одну колонку
+              </span>
+
+            </button>
+
+            <input
+              className="list-name-input"
+              placeholder="Ввести заголовок списка"
+              autoComplete="off"
+              dir="auto"
+              value={title}
+              onKeyPress={this.handleEnter}
+              onChange={this.onChangeHandler}
+            />
+
+            <div className="list-add">
+
+              <button className="list-add-button">
+                Добавить список
+              </button>
+
+              <button className="cancel-edit">
+                X
+              </button>
+
+            </div>
+
+          </div>
+
         </StyledPage>
+
       </>
     );
   }

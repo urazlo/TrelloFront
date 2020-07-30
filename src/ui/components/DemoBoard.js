@@ -1,52 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { columnsStorage, getColumnId } from 'utils';
 import styled from 'styled-components';
 
-class Board extends React.Component {
+class DemoBoard extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      title: '',
-      columns: columnsStorage.get(),
       link: `/b/${this.props.id}`,
     };
   }
-
-  updateLocalStorage = () => {
-    columnsStorage.set(this.state.columns);
-  }
-
-  addColumn = () => {
-    const { columns, title } = this.state;
-
-    if (title.trim()) {
-      const column = {
-        id: getColumnId(),
-        title: title.trim(),
-      };
-
-      this.setState({
-        columns: [...columns, column],
-        title: '',
-      }, this.updateLocalStorage);
-    }
-  }
-
-  onChangeHandler = (e) => {
-    this.setState({ title: e.target.title });
-  }
-
-  handleEnter = (e) => {
-    if (e.key === 'Enter') { this.addColumn(); }
-  };
 
   render() {
     const { title } = this.props;
     return (
       <StyledPage>
+
         <li className="boards-page-board-section-list-item">
 
           <Link
@@ -57,6 +26,7 @@ class Board extends React.Component {
           </Link>
 
         </li>
+
       </StyledPage>
     );
   }
@@ -91,4 +61,4 @@ const StyledPage = styled.div`
 }
 `;
 
-export default Board;
+export default DemoBoard;

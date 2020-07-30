@@ -44,7 +44,6 @@ class SignUp extends React.Component {
         <form
           className="sign-up-form"
           onSubmit={this.onSubmit}
-          onChange={this.onHandleChange}
         >
 
           <TextField

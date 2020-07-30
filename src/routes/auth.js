@@ -17,10 +17,16 @@ export default [
     exact: true,
   },
   {
-    path: '/b/5f2trz5r5',
+    path: '/b/thlgv8con',
     component: UserBoard,
     exact: true,
   },
+  {
+    path: '/b/099b9io72',
+    component: UserBoard,
+    exact: true,
+  },
+
   {
     path: '/auth/sign-in',
     component: SignIn,

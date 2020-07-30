@@ -1,29 +1,53 @@
-// import React from 'react';
+import React from 'react';
 
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
-// class Board extends React.Component {
-//   state = {
-//     test: 'Card',
-//   }
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '',
+      cardTitle: '',
+    };
+  }
 
-//   render() {
-//     const { title } = this.props;
-//     return (
-//       <StyledPage>
-//         <li className="boards-page-board-section-list-item">
+  onChangeHandler = (e) => {
+    this.setState({ value: e.target.value });
+  }
 
-//           <a
-//             className="board-title"
-//             href="#/"
-//           >
-//             <div className="title">{this.state.test} {title}</div>
-//           </a>
+  handleEnter = (e) => {
+    if (e.key === 'Enter') { this.addCard(); }
+  };
 
-//         </li>
-//       </StyledPage>
-//     );
-//   }
-// }
+  render() {
+    const { value, cardTitle } = this.state;
 
-// export default Board;
+    return (
+      <StyledPage>
+
+        <div className="list-card">
+
+          <div className="card-details">
+
+            <span className="card-details-title">{cardTitle}</span>
+
+            <input
+              className="card-details-edit"
+              value={value}
+              onChange={this.onChangeHandler}
+            />
+
+          </div>
+
+        </div>
+
+      </StyledPage>
+    );
+  }
+}
+
+const StyledPage = styled.div`
+
+`;
+
+export default Card;

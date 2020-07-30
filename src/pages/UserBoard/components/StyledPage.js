@@ -7,21 +7,21 @@ export default styled.div`
   background-color: #fff;
   padding: 10px;
   min-height: calc(100vh - 100px);
-background: green;
+  background: green;
   
-.column-item-wrapper{
-width: 272px;
-margin: 0 4px;
-height: 100%;
-box-sizing: border-box;
-display: inline-block;
-vertical-align: top;
-white-space: nowrap;
+  .column-item-wrapper{
+    width: 272px;
+    margin: 10px 4px;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
 }
 
 .card-details{
-background:#fff;
-}
+    background:#fff;
+  }
 
 .list-cards{
     flex: 1 1 auto;
@@ -50,8 +50,6 @@ background:#fff;
     padding: 6px 8px;
     transition: color 85ms ease-in;
 }
-
-
 `;
 
 /* min-height: calc(100vh - 40px);

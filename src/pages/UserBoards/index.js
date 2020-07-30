@@ -2,7 +2,7 @@ import React from 'react';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
 import Header from 'ui/components/Header';
-import Board from 'ui/components/Board';
+import DemoBoard from 'ui/components/DemoBoard';
 import { boardsStorage, getBoardId } from 'utils';
 
 class BorderList extends React.Component {
@@ -58,7 +58,7 @@ class BorderList extends React.Component {
             <ul className="boards-page-board-section-list">
 
               {boards.map(({ id, title }) => (
-                <Board
+                <DemoBoard
                   key={id}
                   id={id}
                   title={title}
