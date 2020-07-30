@@ -1,15 +1,14 @@
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
-// import Board from 'pages/Board';
-import App from 'App';
-
-import Home from 'pages/Home';
+import UserBoard from 'pages/UserBoard';
+import UserBoards from 'pages/UserBoards';
 import RestorePass from 'pages/RestorePass';
+import App from 'App';
 
 export default [
   {
     path: '/',
-    component: Home,
+    component: UserBoards,
     exact: true,
   },
   {
@@ -17,11 +16,11 @@ export default [
     component: App,
     exact: true,
   },
-  // {
-  //   path: '/board',
-  //   component: Board,
-  //   exact: true,
-  // },
+  {
+    path: '/b/5f2trz5r5',
+    component: UserBoard,
+    exact: true,
+  },
   {
     path: '/auth/sign-in',
     component: SignIn,

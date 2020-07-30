@@ -1,46 +1,15 @@
 import React from 'react';
 
-import StyledPage from 'pages/Home/components/StyledPage';
+import StyledPage from 'pages/UserBoards/components/StyledPage';
 import Header from 'ui/components/Header';
+import Board from 'ui/components/Board';
 import { boardsStorage, getBoardId } from 'utils';
-import Board from 'pages/Board';
-
-// componentDidMount() {
-//   window.addEventListener('keydown', this.escapeListener);
-// }
-
-// componentWillUnmount() {
-//   window.removeEventListener('keydown', this.escapeListener);
-// }
-
-// escapeListener = (e) => {
-//   if (e.key === 'Escape') {
-//     this.props.changeEditableTaskId(null);
-//   }
-// }
-
-// onDelete = () => {
-//   this.props.deleteTask(this.props.id);
-// }
-
-// onToggle = () => {
-//   this.props.toggleTask(this.props.id);
-// }
-
-// clickHandler = (e) => {
-//   if (this.props.editableTaskId === this.props.id) {
-//     e.stopPropagation();
-//   } else {
-//     this.props.changeEditableTaskId(null);
-//     this.setState({ changedTitle: this.props.title });
-//   }
-// }
 
 class BorderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      title: '',
       boards: boardsStorage.get(),
     };
   }
@@ -50,23 +19,23 @@ class BorderList extends React.Component {
   }
 
   addBoard = () => {
-    const { boards, value } = this.state;
+    const { boards, title } = this.state;
 
-    if (value.trim()) {
+    if (title.trim()) {
       const board = {
         id: getBoardId(),
-        title: value.trim(),
+        title: title.trim(),
       };
 
       this.setState({
         boards: [...boards, board],
-        value: '',
+        title: '',
       }, this.updateLocalStorage);
     }
   }
 
   onChangeHandler = (e) => {
-    this.setState({ value: e.target.value });
+    this.setState({ title: e.target.value });
   }
 
   handleEnter = (e) => {
@@ -102,7 +71,7 @@ class BorderList extends React.Component {
                   className="add-board-input"
                   placeholder="Создать доску"
                   autoFocus
-                  value={this.state.value}
+                  value={this.state.title}
                   onKeyPress={this.handleEnter}
                   onChange={this.onChangeHandler}
                 />

@@ -16,4 +16,8 @@ button {
   outline:none;
   font-size: 100%;
 }
+
+.hidden{
+  display:none;
+}
 `;
