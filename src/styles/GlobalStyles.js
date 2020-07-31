@@ -7,14 +7,14 @@ body, html {
     line-height: 20px;
     font-weight: 400;
     margin:0 auto;
+    overflow-y : hidden;
 }
 
 button {
   border: 0;
   padding: 0;
   background: none;
-  outline:none;
-  font-size: 100%;
+  outline:none  ;
 }
 
 .hidden{

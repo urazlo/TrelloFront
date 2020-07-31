@@ -1,15 +1,16 @@
 import React from 'react';
 
-import StyledPage from 'pages/UserBoards/components/StyledPage';
 import Header from 'ui/components/Header';
 import DemoBoard from 'ui/components/DemoBoard';
+
+import StyledPage from 'pages/UserBoards/components/StyledPage';
 import { boardsStorage, getBoardId } from 'utils';
 
 class BorderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      value: '',
       boards: boardsStorage.get(),
     };
   }
@@ -19,68 +20,79 @@ class BorderList extends React.Component {
   }
 
   addBoard = () => {
-    const { boards, title } = this.state;
+    const { boards, value } = this.state;
 
-    if (title.trim()) {
+    if (value.trim()) {
       const board = {
         id: getBoardId(),
-        title: title.trim(),
+        title: value.trim(),
       };
 
       this.setState({
         boards: [...boards, board],
-        title: '',
+        value: '',
       }, this.updateLocalStorage);
     }
   }
 
-  onChangeHandler = (e) => {
-    this.setState({ title: e.target.value });
-  }
+  onInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.addBoard();
+    }
 
-  handleEnter = (e) => {
-    if (e.key === 'Enter') { this.addBoard(); }
+    if (e.key === 'Escape') {
+      this.setState({ value: '' });
+    }
   };
 
+  onChangeHandler = (e) => {
+    this.setState({ value: e.target.value });
+  }
+
   render() {
-    const { boards } = this.state;
+    const { boards, value } = this.state;
     return (
       <>
+
         <Header />
+
         <StyledPage>
 
-          <div className="all-boards">
+          <div className="boards-wrapper">
 
-            <div className="boards-page-board-section-header">
+            <div className="boards-section-header">
               Персональные доски
             </div>
 
-            <ul className="boards-page-board-section-list">
+            <ul className="boards-section-list">
 
               {boards.map(({ id, title }) => (
                 <DemoBoard
                   key={id}
-                  id={id}
-                  title={title}
+                  boardId={id}
+                  boardTitle={title}
                 />
               ))}
 
-              <li className="boards-page-board-section-add-item">
+              <li className="boards-section-add-board">
 
                 <input
                   className="add-board-input"
                   placeholder="Создать доску"
                   autoFocus
-                  value={this.state.title}
-                  onKeyPress={this.handleEnter}
+                  value={value}
+                  onKeyDown={this.onInputKeyDown}
                   onChange={this.onChangeHandler}
                 />
+
               </li>
+
             </ul>
 
           </div>
 
         </StyledPage>
+
       </>
     );
   }

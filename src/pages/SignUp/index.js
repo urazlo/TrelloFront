@@ -1,9 +1,10 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
 import StyledPage from 'pages/SignUp/components/StyledPage';
+
 import { signUp } from '../../api/authApi';
 
 class SignUp extends React.Component {
@@ -93,7 +94,9 @@ class SignUp extends React.Component {
           <Link to="/auth/sign-in" className="sign-up-link">
             Already have an account? Sign in
           </Link>
+
         </form>
+
       </StyledPage>
     );
   }

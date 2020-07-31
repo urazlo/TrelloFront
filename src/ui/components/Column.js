@@ -1,18 +1,19 @@
 import React from 'react';
-
 import styled from 'styled-components';
 
-import { cardsStorage, getCardId } from 'utils';
-
 import Card from 'ui/components/Card';
+
+import { cardsStorage, getCardId } from 'utils';
 
 class Column extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      value: '',
+      columnInputValue: this.props.columnTitle,
       cards: cardsStorage.get(),
+      cardInputValue: '',
+      showInput: false,
+      showMenu: false,
     };
   }
 
@@ -21,102 +22,167 @@ class Column extends React.Component {
   }
 
   addCard = () => {
-    const { cards, title } = this.state;
+    const { cards, cardInputValue } = this.state;
 
-    if (title.trim()) {
+    if (cardInputValue.trim()) {
       const card = {
         id: getCardId(),
-        title: title.trim(),
+        title: cardInputValue.trim(),
       };
 
       this.setState({
         cards: [...cards, card],
-        title: '',
+        cardInputValue: '',
       }, this.updateLocalStorage);
     }
   }
 
-  onChangeHandler = (e) => {
-    this.setState({ title: e.target.value });
+  onChangeCardTitleHandler = (e) => {
+    this.setState({ cardInputValue: e.target.value });
   }
 
-  handleEnter = (e) => {
+  onCardInputKeyDown = (e) => {
     if (e.key === 'Enter') { this.addCard(); }
+
+    if (e.key === 'Escape') {
+      this.setState({ cardInputValue: '' });
+    }
   };
 
+  editCardTitle = (id, text) => {
+    const { cards } = this.state;
+
+    const index = cards.findIndex((card) => card.id === id);
+    cards[index].title = text;
+
+    this.setState({ cards }, this.updateLocalStorage);
+  };
+
+  onChangeColumnTitleHandler = (e) => {
+    this.setState({ columnInputValue: e.target.value });
+  }
+
+  onColumnTitleInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.props.editColumnTitle(this.props.columnId, this.state.columnInputValue);
+    }
+
+    if (e.key === 'Escape') {
+      this.setState({ columnInputValue: this.props.columnTitle });
+    }
+  }
+
+  onHeaderClickHandler = () => {
+    this.setState({ showInput: true });
+  }
+
+  onHeaderBlurHandler = () => {
+    this.setState({ showInput: false });
+  }
+
+  onMenuClickHandler = () => {
+    this.setState({ showMenu: true });
+  }
+
+  onMenuBlurHandler = () => {
+    this.setState({ showMenu: false });
+  }
+
   render() {
-    const { cards, title, value } = this.state;
+    const { cards, columnInputValue, cardInputValue, showInput, showMenu } = this.state;
 
     return (
       <StyledPage>
 
-        <div className="column-item-wrapper">
+        <div className="column-wrapper">
 
-          <div className="column-item">
+          <div className="column">
 
-            <div className="column-item-header">
+            <div
+              onClick={this.onHeaderClickHandler}
+              className="column-header"
+            >
 
-              <span className="column-item-header-title">{this.props.columnTitle}</span>
+              <span className="column-header-title">
+                {columnInputValue}
+              </span>
 
-              <input
-                className="column-item-header-title-edit"
-                value={value}
-                onChange={this.onChangeHandler}
-              />
+              {showInput && (
+                <input
+                  autoFocus
+                  className="column-header-title-edit"
+                  value={columnInputValue}
+                  onChange={this.onChangeColumnTitleHandler}
+                  onKeyDown={this.onColumnTitleInputKeyDown}
+                  onBlur={this.onHeaderBlurHandler}
+                />
+              )}
 
               <button
-                className="column-item-header-menu"
+                className="column-header-menu"
               >
                 ...
               </button>
 
             </div>
 
-            <div className="list-cards">
+            <div className="cards-list">
 
               {cards.map(({ id, title }) => (
                 <Card
                   key={id}
-                  id={id}
+                  cardId={id}
                   cardTitle={title}
+                  editCardTitle={this.editCardTitle}
                 />
               ))}
 
             </div>
 
-            <div className="column-item-footer">
+            <div
+              className="column-footer"
+            >
 
-              <div className="add-list column-item-wrapper">
+              <div className="card-add-menu column-wrapper">
 
-                <button className="open-add-list">
+                <button
+                  className="card-add-menu-open-button"
+                  onClick={this.onMenuClickHandler}
+                >
 
-                  <span className="placeholder">
-                    + Добавьте еще одну карточку
+                  <span className="card-add-menu-placeholder">
+                    + Add another card
                   </span>
 
                 </button>
 
-                <input
-                  className="list-name-input"
-                  placeholder="Ввести заголовок карточки"
-                  autoComplete="off"
-                  dir="auto"
-                  value={title}
-                  onKeyPress={this.handleEnter}
-                  onChange={this.onChangeHandler}
-                />
+                {showMenu && (
+                  <>
 
-                <div className="column-item-add-card">
+                    <input
+                      className="card-add-input"
+                      placeholder="Enter the card title"
+                      autoFocus
+                      value={cardInputValue}
+                      onKeyDown={this.onCardInputKeyDown}
+                      onChange={this.onChangeCardTitleHandler}
+                      onBlur={this.onMenuBlurHandler}
+                    />
 
-                  <button className="add-card-button">
-                    Добавить список
+                    <div className="card-edit-menu">
+
+                      <button className="card-edit-accept-button">
+                        Add card
                   </button>
 
-                  <button className="cancel-edit">
-                    Х
+                      <button className="card-edit-cancel-button">
+                        Х
                   </button>
 
-                </div>
+                    </div>
+
+                  </>
+                )}
 
               </div>
 
@@ -132,22 +198,87 @@ class Column extends React.Component {
 }
 
 const StyledPage = styled.div`
-
-.column-item{
-background-color: #ebecf0;
-border-radius: 5px;
-box-sizing: border-box;
-display: flex;
-flex-direction: column;
-max-height: 100%;
-position: relative;
-white-space: normal;
+    .column{
+    background-color: #ebecf0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    position: relative;
+    white-space: normal;
+    margin: 10px 5px;
 }
 
-.column-item-header-menu{
-float:right;
-padding:4px;
+    .column-header-menu{
+    float:right;
+    padding:4px;
 }
+
+    .column-header-title{
+
+}
+
+    .column-header-title-edit{
+}
+
+    .column-header-menu{
+
+}
+
+    .cards-list{
+    flex: 1 1 auto;
+    margin-bottom: 0;
+    overflow: hidden;
+    margin: 0 4px;
+    padding: 0 4px;
+    min-height: 0;
+}
+
+    .column-footer{
+
+}
+
+    .card-add-menu{
+   
+    }
+
+    .card-add-menu-open-button{
+    border-radius: 3px;
+    color: #5e6c84;
+    display: block;
+    flex: 1 0 auto;
+    margin: 2px auto;
+    padding: 4px 8px;
+    position: relative;
+    text-decoration: none;
+    user-select: none;
+    font-size:18px;
+
+    &:hover{
+      background-color: rgba(9,30,66,.13);
+    }
+}
+
+    .card-add-menu-placeholder{
+
+    }
+
+    .card-add-input{
+
+    }
+
+    .card-edit-menu{
+
+    }
+
+    .card-edit-accept-button{
+
+    }
+
+    .card-edit-cancel-button{
+
+    }
 `;
 
 export default Column;

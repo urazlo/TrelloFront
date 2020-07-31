@@ -19,39 +19,49 @@ class Header extends React.Component {
         <div className="header-left-side">
 
           <div>
-            <button
-              className="header-button"
-            >
-              <Link className="header-button-text" to="/">H</Link>
+
+            <button className="header-button">
+
+              <Link className="header-button-icon" to="/">
+                H
+              </Link>
+
             </button>
+
           </div>
 
           <div>
-            <button
-              className="header-button"
-            >
-              <span className="header-button-text">B</span>
+
+            <button className="header-button">
+
+              <span className="header-button-icon">
+                B
+              </span>
+
             </button>
+
           </div>
 
           <div className="header-search-field">
+
             <input
+              className="header-search-field"
               autoComplete="off"
               autoCorrect="off"
               spellCheck="false"
-              className="header-search-field"
               type="search"
               value={this.state.value}
               onChange={this.onChangeHandler}
             />
-            <span className="">
-              <label>
-                <span className="   "
-                  name="search"
-                >
-                </span>
-              </label>
-            </span>
+
+            <button className="header-search-button">
+
+              <span className="header-search-button-icon">
+                S
+              </span>
+
+            </button>
+
           </div>
 
         </div>
@@ -61,19 +71,27 @@ class Header extends React.Component {
         <div className="header-right-side">
 
           <div>
-            <button
-              className="header-button"
-            >
-              <span className="header-button-text">+</span>
+
+            <button className="header-button">
+
+              <span className="header-button-icon">
+                +
+              </span>
+
             </button>
+
           </div>
 
           <div>
-            <button
-              className="header-button"
-            >
-              <span className="header-button-text">P</span>
+
+            <button className="header-button">
+
+              <span className="header-button-icon">
+                P
+              </span>
+
             </button>
+
           </div>
 
         </div>
@@ -120,6 +138,11 @@ const HeaderStyle = styled.div`
 }
 }
 
+.header-button-icon{
+  margin:0 auto;
+    color: #fff;
+    text-decoration:none;
+}
 
 .header-search-field{
     position: relative;
@@ -137,6 +160,14 @@ const HeaderStyle = styled.div`
     width: 180px;
 }
 
+.header-search-button{
+
+}
+
+.header-search-button-icon{
+
+}
+
 .header-logo{
     background-image: url(https://seeklogo.com/images/T/trello-logo-45ABCC6452-seeklogo.com.png);
     background-repeat: no-repeat;
@@ -151,12 +182,6 @@ const HeaderStyle = styled.div`
     justify-content: flex-end;
     flex-grow: 1;
 }
-
-.header-button-text{
-    margin:0 auto;
-    color: #fff;
-    text-decoration:none;
-    }
 `;
 
 export default Header;

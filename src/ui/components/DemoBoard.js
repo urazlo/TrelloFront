@@ -7,22 +7,21 @@ class DemoBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      link: `/b/${this.props.id}`,
+      link: `/b/${this.props.boardId}`,
     };
   }
 
   render() {
-    const { title } = this.props;
+    const { boardTitle } = this.props;
     return (
       <StyledPage>
 
-        <li className="boards-page-board-section-list-item">
+        <li className="boards-section-list-item">
 
-          <Link
-            className="board-title"
-            to={this.state.link}
-          >
-            <div className="title">{title}</div>
+          <Link className="list-item-title-wrapper" to={this.state.link}>
+
+            <div className="list-item-title">{boardTitle}</div>
+
           </Link>
 
         </li>
@@ -32,7 +31,7 @@ class DemoBoard extends React.Component {
   }
 }
 
-const StyledPage = styled.div`
+const StyledPage = styled.li`
     height: 100px;
     width: 150px;
     display: flex;
@@ -47,16 +46,19 @@ const StyledPage = styled.div`
     &:hover{
     background-color: rgba(18, 167, 216, 0.408);
 }
-    
 
-.board-title{
+.boards-section-list-item{
+
+}
+
+.list-item-title-wrapper{
     color: grey;
     text-decoration: none;
     font-size: 25px;
     font-weight: 600;
 }
 
-.title{
+.list-item-title{
   max-width:100px;
 }
 `;

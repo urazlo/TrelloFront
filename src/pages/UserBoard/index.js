@@ -1,16 +1,16 @@
 import React from 'react';
 
-import StyledPage from 'pages/UserBoard/components/StyledPage';
-import { columnsStorage, getColumnId } from 'utils';
-
 import Header from 'ui/components/Header';
 import Column from 'ui/components/Column';
+
+import StyledPage from 'pages/UserBoard/components/StyledPage';
+import { columnsStorage, getColumnId } from 'utils';
 
 class UserBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      value: '',
       columns: columnsStorage.get(),
     };
   }
@@ -20,32 +20,46 @@ class UserBoard extends React.Component {
   }
 
   addColumn = () => {
-    const { columns, title } = this.state;
+    const { columns, value } = this.state;
 
-    if (title.trim()) {
+    if (value.trim()) {
       const column = {
         id: getColumnId(),
-        title: title.trim(),
+        title: value.trim(),
       };
 
       this.setState({
         columns: [...columns, column],
-        title: '',
+        value: '',
       }, this.updateLocalStorage);
     }
   }
 
   onChangeHandler = (e) => {
-    this.setState({ title: e.target.value });
+    this.setState({ value: e.target.value });
   }
 
-  handleEnter = (e) => {
-    if (e.key === 'Enter') { this.addColumn(); }
+  onInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.addColumn();
+    }
+
+    if (e.key === 'Escape') {
+      this.setState({ value: '' });
+    }
+  };
+
+  editColumnTitle = (id, text) => {
+    const { columns } = this.state;
+
+    const index = columns.findIndex((column) => column.id === id);
+    columns[index].title = text;
+
+    this.setState({ columns }, this.updateLocalStorage);
   };
 
   render() {
-    const { columns, title } = this.state;
-
+    const { columns, value } = this.state;
     return (
       <>
 
@@ -53,46 +67,50 @@ class UserBoard extends React.Component {
 
         <StyledPage>
 
-          <div className="column-item-wrapper">
+          <div className="board">
 
-            {columns.map(({ id, title }) => (
-              <Column
-                key={id}
-                columnId={id}
-                columnTitle={title}
+            <div className="column-list-wrapper">
+
+              {columns.map(({ id, title }) => (
+                <Column
+                  key={id}
+                  columnId={id}
+                  columnTitle={title}
+                  editColumnTitle={this.editColumnTitle}
+                />
+              ))}
+
+            </div>
+
+            <div className="column-add-menu column-wrapper">
+
+              <button className="column-add-menu-open-button">
+
+                <span className="column-add-menu-open-placeholder">
+                  + Add another column
+                </span>
+
+              </button>
+
+              <input
+                className="column-edit-title"
+                placeholder="Enter the column title"
+                value={value}
+                onKeyDown={this.onInputKeyDown}
+                onChange={this.onChangeHandler}
               />
-            ))}
-          </div>
 
-          <div className="add-list column-item-wrapper">
+              <div className="column-edit-menu">
 
-            <button className="open-add-list">
-
-              <span className="placeholder">
-                + Добавьте еще одну колонку
-              </span>
-
-            </button>
-
-            <input
-              className="list-name-input"
-              placeholder="Ввести заголовок списка"
-              autoComplete="off"
-              dir="auto"
-              value={title}
-              onKeyPress={this.handleEnter}
-              onChange={this.onChangeHandler}
-            />
-
-            <div className="list-add">
-
-              <button className="list-add-button">
-                Добавить список
+                <button className="column-edit-accept-button">
+                  Add column
               </button>
 
-              <button className="cancel-edit">
-                X
+                <button className="column-edit-cancel-button">
+                  X
               </button>
+
+              </div>
 
             </div>
 

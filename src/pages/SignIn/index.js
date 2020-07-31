@@ -1,9 +1,10 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
 import StyledPage from 'pages/SignIn/components/StyledPage';
+
 import { signIn } from '../../api/authApi';
 
 class SignIn extends React.Component {

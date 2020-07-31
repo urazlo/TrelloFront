@@ -8,13 +8,13 @@ export default styled.div`
     justify-content: center;
     background: #fff;
     
-  .all-boards{
+  .boards-wrapper{
     display:flex;
     flex-direction:column;
   }
 
-  .boards-page-board-section-header{
-    display:inline-block;
+  .boards-section-header{
+    display: inline-block;
     line-height: 24px;
     margin: 20px auto;
     font-size: 25px;
@@ -22,7 +22,7 @@ export default styled.div`
     overflow: hidden;
   }
 
-  .boards-page-board-section-list{
+  .boards-section-list{
     height: 50%;
     width: 800px;
     display: flex;
@@ -33,7 +33,7 @@ export default styled.div`
     margin: 0 auto;
   }
 
-  .boards-page-board-section-add-item{
+  .boards-section-add-board{
     height: 100px;
     width: 150px;
     display: flex;
@@ -51,7 +51,7 @@ export default styled.div`
   }
 
   .add-board-input{
-  width:150px;
+  width: 150px;
   }
 
   ul{
