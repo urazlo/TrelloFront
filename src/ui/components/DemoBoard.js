@@ -31,7 +31,7 @@ class DemoBoard extends React.Component {
   }
 }
 
-const StyledPage = styled.li`
+const StyledPage = styled.div`
     height: 100px;
     width: 150px;
     display: flex;

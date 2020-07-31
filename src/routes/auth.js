@@ -17,7 +17,7 @@ export default [
     exact: true,
   },
   {
-    path: '/b/mhnfe3jyb',
+    path: '/b/m4schndlb',
     component: UserBoard,
     exact: true,
   },

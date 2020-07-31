@@ -80,35 +80,35 @@ class UserBoard extends React.Component {
                 />
               ))}
 
-            </div>
+              <div className="column-add-menu column-wrapper">
 
-            <div className="column-add-menu column-wrapper">
+                <button className="column-add-menu-open-button">
 
-              <button className="column-add-menu-open-button">
-
-                <span className="column-add-menu-open-placeholder">
-                  + Add another column
+                  <span className="column-add-menu-open-placeholder">
+                    + Add another column
                 </span>
 
+                </button>
+
+                <input
+                  className="column-edit-title"
+                  placeholder="Enter the column title"
+                  value={value}
+                  onKeyDown={this.onInputKeyDown}
+                  onChange={this.onChangeHandler}
+                />
+
+                <div className="column-edit-menu">
+
+                  <button className="column-edit-accept-button">
+                    Add column
               </button>
 
-              <input
-                className="column-edit-title"
-                placeholder="Enter the column title"
-                value={value}
-                onKeyDown={this.onInputKeyDown}
-                onChange={this.onChangeHandler}
-              />
-
-              <div className="column-edit-menu">
-
-                <button className="column-edit-accept-button">
-                  Add column
+                  <button className="column-edit-cancel-button">
+                    X
               </button>
 
-                <button className="column-edit-cancel-button">
-                  X
-              </button>
+                </div>
 
               </div>
 

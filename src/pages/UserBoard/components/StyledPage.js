@@ -38,7 +38,14 @@ export default styled.div`
  }
 
  .column-add-menu{
-
+  background-color: #ebecf0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    flex-direction: column;
+    max-height: 100%;
+    position: relative;
+    white-space: normal;
+    margin: 10px 5px;
  }
 
  .column-add-menu-open-button{

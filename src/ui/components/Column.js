@@ -51,7 +51,7 @@ class Column extends React.Component {
 
   editCardTitle = (id, text) => {
     const { cards } = this.state;
-
+   
     const index = cards.findIndex((card) => card.id === id);
     cards[index].title = text;
 
@@ -65,10 +65,11 @@ class Column extends React.Component {
   onColumnTitleInputKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.props.editColumnTitle(this.props.columnId, this.state.columnInputValue);
+      this.setState({ showInput: false });
     }
 
     if (e.key === 'Escape') {
-      this.setState({ columnInputValue: this.props.columnTitle });
+      this.setState({ columnInputValue: this.props.columnTitle, showInput: false });
     }
   }
 

@@ -15,10 +15,11 @@ class Card extends React.Component {
   onCardTitleInputKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.props.editCardTitle(this.props.cardId, this.state.value);
+      this.setState({ showInput: false });
     }
 
     if (e.key === 'Escape') {
-      this.setState({ value: this.props.cardTitle });
+      this.setState({ value: this.props.cardTitle, showInput: false });
     }
   }
 
