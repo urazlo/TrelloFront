@@ -102,25 +102,24 @@ class Header extends React.Component {
 }
 
 const HeaderStyle = styled.div`
-    background-color: #026aa7;
-    box-sizing: border-box;
-    display: flex;
-    overflow: hidden;
-    padding: 4px;
-    max-height: 40px;
-    width:100%;
+  background-color: #026aa7;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
+  padding: 4px;
+  max-height: 40px;
+  width: 100%;
 
-.header-left-side{
+  .header-left-side{
     display: flex;
     justify-content: flex-start;
     flex-grow: 1;
-}
+  }
 
-.header-button{
+  .header-button{
     border: 0;
     border-radius: 4px;
     cursor: pointer;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
     text-decoration: none;
     align-items: center;
     background-color: hsla(0,0%,100%,.3);
@@ -132,19 +131,20 @@ const HeaderStyle = styled.div`
     margin-right: 4px;
     padding: 0;
     width: 32px;
-    font-size:25px;
-&:hover{
-    background-color: hsla(0,0%,100%,.35);
-}
-}
+    font-size: 25px;
 
-.header-button-icon{
-  margin:0 auto;
+    &:hover{
+      background-color: hsla(0,0%,100%,.4);
+    }
+  }
+
+  .header-button-icon{
+    margin: 0 auto;
     color: #fff;
-    text-decoration:none;
-}
+    text-decoration: none;
+  }
 
-.header-search-field{
+  .header-search-field{
     position: relative;
     background-color: hsla(0,0%,100%,.3);
     border-radius: 3px;
@@ -158,30 +158,26 @@ const HeaderStyle = styled.div`
     margin: 0;
     outline: none;
     width: 180px;
-}
+  }
 
-.header-search-button{
+  .header-search-button{}
 
-}
+  .header-search-button-icon{}
 
-.header-search-button-icon{
-
-}
-
-.header-logo{
+  .header-logo{
     background-image: url(https://seeklogo.com/images/T/trello-logo-45ABCC6452-seeklogo.com.png);
     background-repeat: no-repeat;
-    background-size: 25%;
-    max-width:22%;
+    background-size: contain;
+    min-width: 25%;
     cursor: pointer;
     flex-grow: 1;
-}
+  }
 
-.header-right-side{
+  .header-right-side{
     display: flex;
     justify-content: flex-end;
     flex-grow: 1;
-}
+  }
 `;
 
 export default Header;

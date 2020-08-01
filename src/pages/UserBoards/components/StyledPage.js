@@ -9,8 +9,8 @@ export default styled.div`
     background: #fff;
     
   .boards-wrapper{
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
   }
 
   .boards-section-header{
@@ -51,7 +51,9 @@ export default styled.div`
   }
 
   .add-board-input{
-  width: 150px;
+    width: 170px;
+    height: 120px;
+    text-align: center;
   }
 
   ul{
@@ -62,8 +64,8 @@ export default styled.div`
 
   input{
     background: none;
-    border:none;
-    font-size:20px;
+    border: none;
+    font-size: 20px;
     outline: none;
   }
 `;

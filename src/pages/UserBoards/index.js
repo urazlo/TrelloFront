@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Header from 'ui/components/Header';
-import DemoBoard from 'ui/components/DemoBoard';
+import BoardPreview from 'ui/components/BoardPreview';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
 import { boardsStorage, getBoardId } from 'utils';
@@ -61,13 +61,13 @@ class BorderList extends React.Component {
           <div className="boards-wrapper">
 
             <div className="boards-section-header">
-              Персональные доски
+              Personal boards
             </div>
 
             <ul className="boards-section-list">
 
               {boards.map(({ id, title }) => (
-                <DemoBoard
+                <BoardPreview
                   key={id}
                   boardId={id}
                   boardTitle={title}
@@ -78,7 +78,7 @@ class BorderList extends React.Component {
 
                 <input
                   className="add-board-input"
-                  placeholder="Создать доску"
+                  placeholder="Create board"
                   autoFocus
                   value={value}
                   onKeyDown={this.onInputKeyDown}

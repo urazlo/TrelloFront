@@ -81,24 +81,38 @@ const StyledPage = styled.div`
 .card-details{
     background:#fff;
     border-radius: 3px;
+    padding: 4px;
+    position:relative;
 
     &:hover .card-details-edit-button{
-  opacity: 1;
-  color: #dd2b31;
-}
+      opacity: 1;
+      color: black;
+    }
   }
 
-  .card-details-title{
-
-  }
+  .card-details-title{}
 
   .card-details-edit{
-  
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 238px;
+    height: 21px;
+    padding: 3px;
+    outline: none;
+    border: 1px solid rgba(9,30,66,.45);
+    border-radius: 3px;
+    box-shadow: inherit;
+    font-size: 24px;
+    line-height: 20px;
+    font-family: inherit;
   }
 
   .card-details-edit-button{
-opacity:0;
-float:right;
+    opacity: 0;
+    float: right;
+    font-size: 18px;
+    cursor: pointer;
   }
 `;
 

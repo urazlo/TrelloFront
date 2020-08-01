@@ -6,15 +6,17 @@ body, html {
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
-    margin:0 auto;
+    margin: 0 auto;
     overflow-y : hidden;
+    border-radius: 3px;
 }
 
 button {
-  border: 0;
-  padding: 0;
-  background: none;
-  outline:none  ;
+    border: 0;
+    padding: 0;
+    background: none;
+    outline: none;
+    border-radius: 3px;
 }
 
 .hidden{
