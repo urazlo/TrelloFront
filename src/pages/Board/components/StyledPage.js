@@ -83,10 +83,9 @@ export default styled.div`
     font-size: 18px;
   }
 
-.column-add{
-}
+.column-add{}
 
-.column-add-accept-button{
+  .column-add-accept-button{
     margin-top: 5px;
     background-color: #5aac44;
     box-shadow: none;
@@ -99,14 +98,13 @@ export default styled.div`
     font-size: 18px;
     padding: 5px;
     cursor: pointer;
+  }
 
-}
-
-.column-add-cancel-button{
+  .column-add-cancel-button{
     margin-top: 5px;
     float: right;
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
-}
+  }
 `;

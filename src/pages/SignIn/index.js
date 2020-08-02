@@ -41,6 +41,7 @@ class SignIn extends React.Component {
           className="sign-in-form"
           onSubmit={this.onSubmit}
         >
+
           <TextField
             onChange={this.onEmailChange}
             margin="normal"
@@ -75,11 +76,15 @@ class SignIn extends React.Component {
           </Button>
 
           <div className="help-links">
+
             <Link to="/restore-pass">Forgot password?</Link>
 
             <Link to="/sign-up">Don't have an account? Sign Up</Link>
+
           </div>
+
         </form>
+
       </StyledPage>
     );
   }

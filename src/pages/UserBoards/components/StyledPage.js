@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export default styled.div`
-    min-height: calc(100vh - 40px);
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    background: #fff;
+  min-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fff;
     
   .boards-wrapper{
     display: flex;
@@ -47,7 +47,7 @@ export default styled.div`
     
     &:hover{
     background-color: rgba(18, 167, 216, 0.408);
-}
+    }
   }
 
   .add-board-input{

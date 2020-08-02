@@ -204,13 +204,13 @@ class Column extends React.Component {
 }
 
 const StyledPage = styled.div`
-    background-color: #ebecf0;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    max-height: 100%;
-    white-space: normal;
-    margin: 10px 5px;
+  background-color: #ebecf0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  white-space: normal;
+  margin: 10px 5px;
 
   .column-header{
     padding: 10px 10px 5px 15px;
@@ -223,8 +223,7 @@ const StyledPage = styled.div`
     padding: 4px;
   }
 
-  .column-header-title{
-  }
+  .column-header-title{}
 
   .column-header-title-edit{
     position: absolute;
@@ -254,11 +253,11 @@ const StyledPage = styled.div`
     margin: 0 4px;
     padding: 0 4px;
     min-height: 0;
-}
+  }
 
   .column-footer{
     position: relative;
-}
+  }
 
   .card-add-menu{
     margin: 0 4px;
@@ -282,7 +281,7 @@ const StyledPage = styled.div`
     &:hover{
       background-color: rgba(9,30,66,.13);
     }
-}
+  }
 
   .card-add-menu-placeholder{}
 
@@ -294,7 +293,7 @@ const StyledPage = styled.div`
     padding: 5px;
     height: 30px;
     font-size: 18px;
-}
+  }
 
   .card-add-menu-wrapper{
     width: 252px;
@@ -306,7 +305,7 @@ const StyledPage = styled.div`
     top: 0;
     left: 0;
     padding: 5px;
-}
+  }
 
   .card-add-menu{}
 
@@ -327,7 +326,7 @@ const StyledPage = styled.div`
     &:hover{
     background-color: #5aac55;
     }
-}
+  }
 
   .card-add-cancel-button{
     margin-top: 5px;
@@ -335,7 +334,7 @@ const StyledPage = styled.div`
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
-}
+  }
 `;
 
 export default Column;

@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-body, html {
+  body, html {
     color: #172b4d;
     font-size: 14px;
     line-height: 20px;
@@ -9,17 +9,17 @@ body, html {
     margin: 0 auto;
     overflow-y : hidden;
     border-radius: 3px;
-}
+  }
 
-button {
+  button {
     border: 0;
     padding: 0;
     background: none;
     outline: none;
     border-radius: 3px;
-}
+  }
 
-.hidden{
-  display:none;
-}
+  .hidden{
+  display: none;
+  }
 `;
