@@ -1,42 +1,32 @@
 /* eslint-disable no-console */
-import axios from 'axios';
-import config from '../config';
+// import config from 'config';
+import axios from './axios';
+
+const path = 'auth';
 
 export const signUp = ({ login, email, password }) => {
   return axios({
-    url: `${config.apiBaseUrl}/auth/sign-up`,
+    url: `/${path}/sign-up`,
     method: 'POST',
-    params: {},
-    headers: {},
     data: {
-      login: `${login}`,
-      email: `${email}`,
-      password: `${password}`,
+      login,
+      email,
+      password,
     },
-  }).then(res => {
-    console.log(res);
-    console.log('successful signup');
-  }).catch(err => {
-    console.log('signup error: ');
-    console.log(err);
   });
 };
 
 export const signIn = ({ email, password }) => {
   return axios({
-    url: `${config.apiBaseUrl}/auth/sign-in`,
+    url: `/${path}/sign-in`,
     method: 'POST',
-    params: {},
-    headers: {},
     data: {
-      email: `${email}`,
-      password: `${password}`,
+      email,
+      password,
     },
-  }).then(res => {
-    console.log(res);
-    console.log('successful signIn');
-  }).catch(err => {
-    console.log('signIn error: ');
-    console.log(err);
   });
+};
+
+export const check = () => {
+  return axios.get(`/${path}/check`);
 };

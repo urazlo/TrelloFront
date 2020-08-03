@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Header from 'ui/components/Header';
 import Column from 'ui/components/Column';
 
 import StyledPage from 'pages/Board/components/StyledPage';
@@ -76,85 +75,79 @@ class Board extends React.Component {
   render() {
     const { columns, value, showMenu } = this.state;
     return (
-      <>
+      <StyledPage>
 
-        <Header />
+        <div className="board">
 
-        <StyledPage>
+          <div className="column-list-wrapper">
 
-          <div className="board">
+            {columns.map(({ id, title }) => (
+              <Column
+                key={id}
+                columnId={id}
+                columnTitle={title}
+                editColumnTitle={this.editColumnTitle}
+              />
+            ))}
 
-            <div className="column-list-wrapper">
+            <div
+              className="column-add-menu column-wrapper"
+            >
 
-              {columns.map(({ id, title }) => (
-                <Column
-                  key={id}
-                  columnId={id}
-                  columnTitle={title}
-                  editColumnTitle={this.editColumnTitle}
-                />
-              ))}
-
-              <div
-                className="column-add-menu column-wrapper"
+              <button
+                className="column-add-menu-open-button"
+                onClick={this.onMenuClickHandler}
               >
 
-                <button
-                  className="column-add-menu-open-button"
-                  onClick={this.onMenuClickHandler}
-                >
-
-                  <span className="column-add-menu-open-placeholder">
-                    + Add another column
+                <span className="column-add-menu-open-placeholder">
+                  + Add another column
                 </span>
 
-                </button>
+              </button>
 
-                {showMenu && (
+              {showMenu && (
+                <div
+                  className="column-add-menu-wrapper"
+                >
+
+                  <input
+                    className="column-add-input"
+                    placeholder="Enter the column title"
+                    value={value}
+                    autoFocus
+                    onKeyDown={this.onInputKeyDown}
+                    onChange={this.onChangeHandler}
+                  />
+
                   <div
-                    className="column-add-menu-wrapper"
-                  >
+                    className="column-add">
 
-                    <input
-                      className="column-add-input"
-                      placeholder="Enter the column title"
-                      value={value}
-                      autoFocus
-                      onKeyDown={this.onInputKeyDown}
-                      onChange={this.onChangeHandler}
-                    />
-
-                    <div
-                      className="column-add">
-
-                      <button
-                        className="column-add-accept-button"
-                        onClick={this.onAcceptClickHandler}
-                      >
-                        Add column
+                    <button
+                      className="column-add-accept-button"
+                      onClick={this.onAcceptClickHandler}
+                    >
+                      Add column
                   </button>
 
-                      <button
-                        className="column-add-cancel-button"
-                        onClick={this.onCancelClickHandler}
-                      >
-                        X
+                    <button
+                      className="column-add-cancel-button"
+                      onClick={this.onCancelClickHandler}
+                    >
+                      X
                   </button>
-
-                    </div>
 
                   </div>
-                )}
 
-              </div>
+                </div>
+              )}
 
             </div>
 
           </div>
 
-        </StyledPage>
+        </div>
 
-      </>
+      </StyledPage>
     );
   }
 }

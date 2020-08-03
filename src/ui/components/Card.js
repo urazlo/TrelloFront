@@ -36,7 +36,6 @@ class Card extends React.Component {
 
     return (
       <StyledPage>
-
         <div className="card-details">
 
           <span className="card-details-title">{value}</span>
@@ -57,10 +56,9 @@ class Card extends React.Component {
             className="card-details-edit-button"
           >
             #
-         </button>
+          </button>
 
         </div>
-
       </StyledPage>
     );
   }

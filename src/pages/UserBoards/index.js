@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Header from 'ui/components/Header';
 import BoardPreview from 'ui/components/BoardPreview';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
@@ -52,48 +51,42 @@ class BorderList extends React.Component {
   render() {
     const { boards, value } = this.state;
     return (
-      <>
+      <StyledPage>
 
-        <Header />
+        <div className="boards-wrapper">
 
-        <StyledPage>
-
-          <div className="boards-wrapper">
-
-            <div className="boards-section-header">
-              Personal boards
+          <div className="boards-section-header">
+            Personal boards
             </div>
 
-            <ul className="boards-section-list">
+          <ul className="boards-section-list">
 
-              {boards.map(({ id, title }) => (
-                <BoardPreview
-                  key={id}
-                  boardId={id}
-                  boardTitle={title}
-                />
-              ))}
+            {boards.map(({ id, title }) => (
+              <BoardPreview
+                key={id}
+                boardId={id}
+                boardTitle={title}
+              />
+            ))}
 
-              <li className="boards-section-add-board">
+            <li className="boards-section-add-board">
 
-                <input
-                  className="add-board-input"
-                  placeholder="Create board"
-                  autoFocus
-                  value={value}
-                  onKeyDown={this.onInputKeyDown}
-                  onChange={this.onChangeHandler}
-                />
+              <input
+                className="add-board-input"
+                placeholder="Create board"
+                autoFocus
+                value={value}
+                onKeyDown={this.onInputKeyDown}
+                onChange={this.onChangeHandler}
+              />
 
-              </li>
+            </li>
 
-            </ul>
+          </ul>
 
-          </div>
+        </div>
 
-        </StyledPage>
-
-      </>
+      </StyledPage>
     );
   }
 }

@@ -3,8 +3,6 @@ import SignUp from 'pages/SignUp';
 import Board from 'pages/Board';
 import UserBoards from 'pages/UserBoards';
 import RestorePass from 'pages/RestorePass';
-import App from 'App';
-// import { boardLink } from "ui/components/BoardPreview";
 
 export default [
   {
@@ -23,22 +21,12 @@ export default [
     exact: true,
   },
   {
-    path: '/start',
-    component: App,
-    exact: true,
-  },
-  {
     path: '/',
     component: UserBoards,
     exact: true,
   },
   {
-    path: '/b/2youh9j2m',
-    component: Board,
-    exact: true,
-  },
-  {
-    path: '/b/c3k8n713d',
+    path: '/board/sjj3owq2p',
     component: Board,
     exact: true,
   },

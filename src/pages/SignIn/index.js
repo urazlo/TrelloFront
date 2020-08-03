@@ -79,7 +79,7 @@ class SignIn extends React.Component {
 
             <Link to="/restore-pass">Forgot password?</Link>
 
-            <Link to="/sign-up">Don't have an account? Sign Up</Link>
+            <Link to="/auth/sign-up">Don't have an account? Sign Up</Link>
 
           </div>
 

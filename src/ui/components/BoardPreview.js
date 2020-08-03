@@ -7,7 +7,7 @@ class DemoBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      link: `/b/${this.props.boardId}`,
+      link: `/board/${this.props.boardId}`,
     };
   }
 

@@ -1,3 +1,4 @@
+import { accessTokenKey } from 'config';
 import { boardsStorageKey, columnsStorageKey, cardsStorageKey } from './constants';
 
 export const getBoardId = () => {
@@ -51,5 +52,19 @@ export const cardsStorage = {
 
   set: (card) => {
     localStorage.setItem(cardsStorageKey, JSON.stringify(card));
+  },
+};
+
+export const accessToken = {
+  get: () => {
+    try {
+      return JSON.parse(localStorage.getItem(accessTokenKey));
+    } catch (error) {
+      return null;
+    }
+  },
+
+  set: (token) => {
+    localStorage.setItem(accessTokenKey, JSON.stringify(token));
   },
 };
