@@ -17,8 +17,16 @@ class SignUp extends React.Component {
 
     this.state = {
       login: '',
+      loginHelperText: '',
+      loginError: false,
+
       email: '',
+      emailHelperText: '',
+      emailError: false,
+
       password: '',
+      passwordHelperText: '',
+      passwordError: false,
     };
   }
 
@@ -44,17 +52,72 @@ class SignUp extends React.Component {
 
       if (user) {
         updateUser(user);
-        return console.log('successful sign-up');
+        this.setState({
+          login: '',
+          loginHelperText: '',
+          loginError: false,
+
+          email: '',
+          emailHelperText: '',
+          emailError: false,
+
+          password: '',
+          passwordHelperText: '',
+          passwordError: false,
+        });
       }
     } catch (err) {
-      if (err.response.status === 400) {
-        return console.log('Incorrect password.');
+      if (err.response.data === 'Invalid login') {
+        this.setState({
+          loginHelperText: err.response.data,
+          loginError: true,
+
+          emailHelperText: '',
+          emailError: false,
+
+          passwordHelperText: '',
+          passwordError: false,
+        });
       }
-      console.log('Something went wrong');
+
+      if (err.response.data === 'Invalid email') {
+        this.setState({
+          loginHelperText: '',
+          loginError: false,
+
+          emailHelperText: err.response.data,
+          emailError: true,
+
+          passwordHelperText: '',
+          passwordError: false,
+        });
+      }
+
+      if (err.response.data === 'Invalid password') {
+        this.setState({
+          loginHelperText: '',
+          loginError: false,
+
+          emailHelperText: '',
+          emailError: false,
+
+          passwordHelperText: err.response.data,
+          passwordError: true,
+        });
+      }
     }
   }
 
   render() {
+    const {
+      loginError,
+      passwordError,
+      emailError,
+      loginHelperText,
+      passwordHelperText,
+      emailHelperText,
+    } = this.state;
+
     return (
       <StyledPage>
 
@@ -72,9 +135,10 @@ class SignUp extends React.Component {
             variant="outlined"
             required
             fullWidth
-            id="login"
             label="login"
             autoFocus
+            error={loginError}
+            helperText={loginHelperText}
           />
 
           <TextField
@@ -83,9 +147,9 @@ class SignUp extends React.Component {
             variant="outlined"
             required
             fullWidth
-            id="email"
             label="Email Address"
-            name="email"
+            error={emailError}
+            helperText={emailHelperText}
           />
 
           <TextField
@@ -94,10 +158,10 @@ class SignUp extends React.Component {
             variant="outlined"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
+            error={passwordError}
+            helperText={passwordHelperText}
           />
 
           <Button

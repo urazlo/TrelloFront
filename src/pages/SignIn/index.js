@@ -17,9 +17,12 @@ class SignIn extends React.Component {
 
     this.state = {
       password: '',
+      passwordHelperText: '',
+      passwordError: false,
+
       email: '',
-      error: false,
-      helperText: 'Something went wrong',
+      emailHelperText: '',
+      emailError: false,
     };
   }
 
@@ -32,27 +35,58 @@ class SignIn extends React.Component {
   }
 
   onSubmit = async (ev) => {
+    const { email, password } = this.state;
     try {
       ev.preventDefault();
 
-      const { email, password } = this.state;
       const user = await signIn({ email, password });
+
       if (user) {
-        return updateUser(user);
+        updateUser(user);
+
+        this.setState({
+          password: '',
+          passwordHelperText: '',
+          passwordError: false,
+
+          email: '',
+          emailHelperText: '',
+          emailError: false,
+        });
       }
     } catch (err) {
       if (err.response.status === 404) {
-        return this.setState({ helperText: 'There is not an account for this email' });
+        // input[email].focus();
+
+        this.setState({
+          emailHelperText: 'There is not an account for this email.',
+          emailError: true,
+          passwordError: false,
+          passwordHelperText: '',
+        });
       }
 
       if (err.response.status === 400) {
-        return this.setState({ helperText: 'Incorrect email address and / or password.' });
+        // input[password].focus();
+
+        this.setState({
+          passwordHelperText: 'Incorrect email address and / or password.',
+          passwordError: true,
+          emailError: false,
+          emailHelperText: '',
+        });
       }
     }
   }
 
   render() {
-    const { autoFocus, error, helperText } = this.state;
+    const {
+      passwordError,
+      emailError,
+      passwordHelperText,
+      emailHelperText,
+    } = this.state;
+
     return (
       <StyledPage>
 
@@ -69,8 +103,10 @@ class SignIn extends React.Component {
             variant="outlined"
             required
             fullWidth
+            name='email'
             label="Email Address"
-            name="email"
+            error={emailError}
+            helperText={emailHelperText}
           />
 
           <TextField
@@ -79,12 +115,11 @@ class SignIn extends React.Component {
             variant="outlined"
             required
             fullWidth
-            name="password"
+            name='password'
             label="Password"
             type="password"
-            autoFocus={autoFocus}
-            helperText={helperText}
-            error={error}
+            error={passwordError}
+            helperText={passwordHelperText}
           />
 
           <Button
