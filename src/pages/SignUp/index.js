@@ -1,11 +1,15 @@
+/* eslint-disable no-console */
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import StyledPage from 'pages/SignUp/components/StyledPage';
 
-import { signUp } from '../../api/authApi';
+import { signUp } from 'api/authApi';
+import { updateUser } from 'store/main/actions';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -30,10 +34,24 @@ class SignUp extends React.Component {
     this.setState({ password: ev.target.value });
   }
 
-  onSubmit = (ev) => {
-    ev.preventDefault();
-    const { login, email, password } = this.state;
-    signUp({ login, email, password });
+  onSubmit = async (ev) => {
+    try {
+      ev.preventDefault();
+
+      const { login, email, password } = this.state;
+
+      const user = await signUp({ login, email, password });
+
+      if (user) {
+        updateUser(user);
+        return console.log('successful sign-up');
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        return console.log('Incorrect password.');
+      }
+      console.log('Something went wrong');
+    }
   }
 
   render() {
@@ -102,4 +120,11 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+const connectFunction = connect(
+  null,
+  {
+    updateUser,
+  },
+);
+
+export default connectFunction(SignUp);

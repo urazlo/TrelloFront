@@ -20,6 +20,6 @@ export default createGlobalStyle`
   }
 
   .hidden{
-  display: none;
+    display: none;
   }
 `;

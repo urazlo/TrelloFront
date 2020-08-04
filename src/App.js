@@ -1,19 +1,21 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Header from 'ui/components/Header';
 import Router from 'routes';
 import { check } from 'api/authApi';
+import { updateUser } from 'store/main/actions';
 
 class App extends React.Component {
   state = {
     isAuthenticated: false,
-    user: null,
   };
 
   async componentDidMount() {
     const user = await check().catch(() => null);
-    this.setState({ isAuthenticated: true, user });
+    this.setState({ isAuthenticated: true });
+    updateUser(user);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -30,4 +32,13 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const connectFunction = connect(
+  ({ main }) => ({
+    user: main.user,
+  }),
+  {
+    updateUser,
+  },
+);
+
+export default connectFunction(App);

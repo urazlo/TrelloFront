@@ -1,10 +1,14 @@
+/* eslint-disable no-console */
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import StyledPage from 'pages/SignIn/components/StyledPage';
 
+import { updateUser } from 'store/main/actions';
 import { signIn } from '../../api/authApi';
 
 class SignIn extends React.Component {
@@ -14,6 +18,8 @@ class SignIn extends React.Component {
     this.state = {
       password: '',
       email: '',
+      error: false,
+      helperText: 'Something went wrong',
     };
   }
 
@@ -25,13 +31,28 @@ class SignIn extends React.Component {
     this.setState({ password: ev.target.value });
   }
 
-  onSubmit = (ev) => {
-    ev.preventDefault();
-    const { email, password } = this.state;
-    signIn({ email, password });
+  onSubmit = async (ev) => {
+    try {
+      ev.preventDefault();
+
+      const { email, password } = this.state;
+      const user = await signIn({ email, password });
+      if (user) {
+        return updateUser(user);
+      }
+    } catch (err) {
+      if (err.response.status === 404) {
+        return this.setState({ helperText: 'There is not an account for this email' });
+      }
+
+      if (err.response.status === 400) {
+        return this.setState({ helperText: 'Incorrect email address and / or password.' });
+      }
+    }
   }
 
   render() {
+    const { autoFocus, error, helperText } = this.state;
     return (
       <StyledPage>
 
@@ -48,10 +69,8 @@ class SignIn extends React.Component {
             variant="outlined"
             required
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
-            autoFocus
           />
 
           <TextField
@@ -63,7 +82,9 @@ class SignIn extends React.Component {
             name="password"
             label="Password"
             type="password"
-            id="password"
+            autoFocus={autoFocus}
+            helperText={helperText}
+            error={error}
           />
 
           <Button
@@ -90,4 +111,11 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+const connectFunction = connect(
+  null,
+  {
+    updateUser,
+  },
+);
+
+export default connectFunction(SignIn);

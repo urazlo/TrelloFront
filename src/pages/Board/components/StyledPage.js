@@ -4,10 +4,9 @@ export default styled.div`
   display: flex;
   position: relative;
   font-size: 24px;
-  background-color: #fff;
   padding: 10px;
   min-height: calc(100vh - 100px);
-  background: #41b14199;
+  background: #419bb1a3;
 
   .board{
     user-select: none;
