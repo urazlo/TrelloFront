@@ -6,7 +6,7 @@ export default styled.div`
   font-size: 24px;
   padding: 10px;
   min-height: calc(100vh - 100px);
-  background: #419bb1a3;
+  background: #32afcde6;
 
   .board{
     user-select: none;

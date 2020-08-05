@@ -14,7 +14,9 @@ class App extends React.Component {
 
   async componentDidMount() {
     const user = await check().catch(() => null);
+
     this.setState({ isAuthenticated: true });
+
     updateUser(user);
   }
 

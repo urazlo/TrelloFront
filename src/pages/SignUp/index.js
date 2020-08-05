@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import StyledPage from 'pages/SignUp/components/StyledPage';
 
 import { signUp } from 'api/authApi';
+import { accessToken } from 'utils';
 import { updateUser } from 'store/main/actions';
 
 class SignUp extends React.Component {
@@ -17,105 +18,77 @@ class SignUp extends React.Component {
 
     this.state = {
       login: '',
-      loginHelperText: '',
-      loginError: false,
+      loginError: '',
 
       email: '',
-      emailHelperText: '',
-      emailError: false,
+      emailError: '',
 
       password: '',
-      passwordHelperText: '',
-      passwordError: false,
+      passwordError: '',
     };
-  }
-
-  onLoginChange = (ev) => {
-    this.setState({ login: ev.target.value });
-  }
-
-  onEmailChange = (ev) => {
-    this.setState({ email: ev.target.value });
-  }
-
-  onPasswordChange = (ev) => {
-    this.setState({ password: ev.target.value });
   }
 
   onSubmit = async (ev) => {
     try {
       ev.preventDefault();
 
+      const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      const noWhiteSpacesPattern = /^\S*$/;
       const { login, email, password } = this.state;
 
+      if (login.toString().length < 3 || !noWhiteSpacesPattern.test(login)) {
+        this.errorsClear();
+        return this.setState({ loginError: 'Invalid login' });
+      }
+
+      if (!emailPattern.test(email)) {
+        this.errorsClear();
+        return this.setState({ emailError: 'Invalid email' });
+      }
+
+      if (password.toString().length < 6 || !noWhiteSpacesPattern.test(password)) {
+        this.errorsClear();
+        return this.setState({ passwordError: 'Invalid password' });
+      }
+
       const user = await signUp({ login, email, password });
+      accessToken.set(user.token);
 
-      if (user) {
-        updateUser(user);
-        this.setState({
-          login: '',
-          loginHelperText: '',
-          loginError: false,
-
-          email: '',
-          emailHelperText: '',
-          emailError: false,
-
-          password: '',
-          passwordHelperText: '',
-          passwordError: false,
-        });
-      }
+      updateUser(user);
     } catch (err) {
-      if (err.response.data === 'Invalid login') {
-        this.setState({
-          loginHelperText: err.response.data,
-          loginError: true,
-
-          emailHelperText: '',
-          emailError: false,
-
-          passwordHelperText: '',
-          passwordError: false,
-        });
+      if (err.response.data === 'This login is already exists') {
+        this.errorsClear();
+        return this.setState({ loginError: err.response.data });
       }
 
-      if (err.response.data === 'Invalid email') {
-        this.setState({
-          loginHelperText: '',
-          loginError: false,
-
-          emailHelperText: err.response.data,
-          emailError: true,
-
-          passwordHelperText: '',
-          passwordError: false,
-        });
-      }
-
-      if (err.response.data === 'Invalid password') {
-        this.setState({
-          loginHelperText: '',
-          loginError: false,
-
-          emailHelperText: '',
-          emailError: false,
-
-          passwordHelperText: err.response.data,
-          passwordError: true,
-        });
+      if (err.response.data === 'This email is already exists') {
+        this.errorsClear();
+        return this.setState({ emailError: err.response.data });
       }
     }
   }
+
+  errorsClear = () => {
+    this.setState({
+      loginError: '',
+      emailError: '',
+      passwordError: '',
+    });
+  }
+
+  onInputChange = (ev) => {
+    this.errorsClear();
+    this.setState({ [ev.target.name]: ev.target.value });
+  };
 
   render() {
     const {
       loginError,
       passwordError,
       emailError,
-      loginHelperText,
-      passwordHelperText,
-      emailHelperText,
+      login,
+      password,
+      email,
     } = this.state;
 
     return (
@@ -129,7 +102,7 @@ class SignUp extends React.Component {
         >
 
           <TextField
-            onChange={this.onLoginChange}
+            onChange={this.onInputChange}
             name="login"
             margin="normal"
             variant="outlined"
@@ -137,31 +110,36 @@ class SignUp extends React.Component {
             fullWidth
             label="login"
             autoFocus
-            error={loginError}
-            helperText={loginHelperText}
+            value={login}
+            error={Boolean(loginError)}
+            helperText={loginError}
           />
 
           <TextField
-            onChange={this.onEmailChange}
+            onChange={this.onInputChange}
             margin="normal"
             variant="outlined"
             required
             fullWidth
+            name="email"
             label="Email Address"
-            error={emailError}
-            helperText={emailHelperText}
+            value={email}
+            error={Boolean(emailError)}
+            helperText={emailError}
           />
 
           <TextField
-            onChange={this.onPasswordChange}
+            onChange={this.onInputChange}
             margin="normal"
             variant="outlined"
             required
             fullWidth
+            name="password"
             label="Password"
             type="password"
-            error={passwordError}
-            helperText={passwordHelperText}
+            value={password}
+            error={Boolean(passwordError)}
+            helperText={passwordError}
           />
 
           <Button

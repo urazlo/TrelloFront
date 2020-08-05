@@ -3,6 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import logoImage from 'ui/images/logo.png';
+
 class Header extends React.Component {
   state = {
     value: '',
@@ -43,7 +45,6 @@ class Header extends React.Component {
           </div>
 
           <div className="header-search-field">
-
             <input
               className="header-search-field"
               autoComplete="off"
@@ -53,49 +54,35 @@ class Header extends React.Component {
               value={this.state.value}
               onChange={this.onChangeHandler}
             />
-
             <button className="header-search-button">
-
               <span className="header-search-button-icon">
                 S
               </span>
-
             </button>
-
           </div>
-
         </div>
 
-        <Link className="header-logo" to="/"></Link>
+        <Link className="header-logo" to="/">
+          <img src={logoImage} alt="logo" />
+        </Link>
 
         <div className="header-right-side">
-
           <div>
-
             <button className="header-button">
-
               <span className="header-button-icon">
                 +
               </span>
-
             </button>
-
           </div>
 
           <div>
-
             <button className="header-button">
-
               <span className="header-button-icon">
                 P
               </span>
-
             </button>
-
           </div>
-
         </div>
-
       </HeaderStyle>
     );
   }
@@ -132,6 +119,7 @@ const HeaderStyle = styled.div`
     padding: 0;
     width: 32px;
     font-size: 25px;
+    
 
     &:hover{
       background-color: hsla(0,0%,100%,.4);
@@ -165,12 +153,14 @@ const HeaderStyle = styled.div`
   .header-search-button-icon{}
 
   .header-logo{
-    background-image: url(https://seeklogo.com/images/T/trello-logo-45ABCC6452-seeklogo.com.png);
+    /* background-image: url(header-logo-2x.01ef898811a879595cea.png); */
     background-repeat: no-repeat;
     background-size: contain;
-    min-width: 25%;
     cursor: pointer;
-    flex-grow: 1;
+    width: 85px;
+    position: absolute;
+    left: 50%;
+    height: 32px;
   }
 
   .header-right-side{

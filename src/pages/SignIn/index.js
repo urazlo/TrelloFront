@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import StyledPage from 'pages/SignIn/components/StyledPage';
 
 import { updateUser } from 'store/main/actions';
+import { accessToken } from 'utils';
 import { signIn } from '../../api/authApi';
 
 class SignIn extends React.Component {
@@ -16,75 +17,54 @@ class SignIn extends React.Component {
     super(props);
 
     this.state = {
-      password: '',
-      passwordHelperText: '',
-      passwordError: false,
+      userName: '',
+      userNameError: '',
 
-      email: '',
-      emailHelperText: '',
-      emailError: false,
+      password: '',
+      passwordError: '',
     };
   }
 
-  onEmailChange = (ev) => {
-    this.setState({ email: ev.target.value });
-  }
-
-  onPasswordChange = (ev) => {
-    this.setState({ password: ev.target.value });
-  }
-
   onSubmit = async (ev) => {
-    const { email, password } = this.state;
     try {
       ev.preventDefault();
+      const { userName, password } = this.state;
 
-      const user = await signIn({ email, password });
+      const user = await signIn({ userName, password });
+      accessToken.set(user.token);
 
-      if (user) {
-        updateUser(user);
-
-        this.setState({
-          password: '',
-          passwordHelperText: '',
-          passwordError: false,
-
-          email: '',
-          emailHelperText: '',
-          emailError: false,
-        });
-      }
+      updateUser(user);
     } catch (err) {
-      if (err.response.status === 404) {
-        // input[email].focus();
-
-        this.setState({
-          emailHelperText: 'There is not an account for this email.',
-          emailError: true,
-          passwordError: false,
-          passwordHelperText: '',
-        });
+      if (err.response.data === 'Not Found') {
+        this.errorsClear();
+        this.setState({ userNameError: 'There is not an account for this user.' });
       }
 
-      if (err.response.status === 400) {
-        // input[password].focus();
-
-        this.setState({
-          passwordHelperText: 'Incorrect email address and / or password.',
-          passwordError: true,
-          emailError: false,
-          emailHelperText: '',
-        });
+      if (err.response.data === 'Wrong password') {
+        this.errorsClear();
+        this.setState({ passwordError: err.response.data });
       }
     }
   }
 
+  errorsClear = () => {
+    this.setState({
+      userNameError: '',
+      passwordError: '',
+    });
+  }
+
+  onInputChange = (ev) => {
+    this.errorsClear();
+    this.setState({ [ev.target.name]: ev.target.value });
+  };
+
   render() {
     const {
+      userName,
+      password,
+      userNameError,
       passwordError,
-      emailError,
-      passwordHelperText,
-      emailHelperText,
     } = this.state;
 
     return (
@@ -98,19 +78,20 @@ class SignIn extends React.Component {
         >
 
           <TextField
-            onChange={this.onEmailChange}
+            onChange={this.onInputChange}
             margin="normal"
             variant="outlined"
             required
             fullWidth
-            name='email'
-            label="Email Address"
-            error={emailError}
-            helperText={emailHelperText}
+            name='userName'
+            label="Email / login"
+            value={userName}
+            error={Boolean(userNameError)}
+            helperText={userNameError}
           />
 
           <TextField
-            onChange={this.onPasswordChange}
+            onChange={this.onInputChange}
             margin="normal"
             variant="outlined"
             required
@@ -118,8 +99,9 @@ class SignIn extends React.Component {
             name='password'
             label="Password"
             type="password"
-            error={passwordError}
-            helperText={passwordHelperText}
+            value={password}
+            error={Boolean(passwordError)}
+            helperText={passwordError}
           />
 
           <Button

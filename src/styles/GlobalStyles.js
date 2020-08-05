@@ -8,7 +8,6 @@ export default createGlobalStyle`
     font-weight: 400;
     margin: 0 auto;
     overflow-y : hidden;
-    border-radius: 3px;
   }
 
   button {

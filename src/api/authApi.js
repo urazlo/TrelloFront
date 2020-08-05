@@ -16,12 +16,12 @@ export const signUp = ({ login, email, password }) => {
   });
 };
 
-export const signIn = ({ email, password }) => {
+export const signIn = ({ userName, password }) => {
   return axios({
     url: `/${path}/sign-in`,
     method: 'POST',
     data: {
-      email,
+      userName,
       password,
     },
   });
