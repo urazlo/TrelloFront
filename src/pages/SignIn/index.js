@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
@@ -13,17 +15,13 @@ import { accessToken } from 'utils';
 import { signIn } from '../../api/authApi';
 
 class SignIn extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    userName: '',
+    userNameError: '',
 
-    this.state = {
-      userName: '',
-      userNameError: '',
-
-      password: '',
-      passwordError: '',
-    };
-  }
+    password: '',
+    passwordError: '',
+  };
 
   onSubmit = async (ev) => {
     try {
@@ -33,7 +31,8 @@ class SignIn extends React.Component {
       const user = await signIn({ userName, password });
       accessToken.set(user.token);
 
-      updateUser(user);
+      this.props.updateUser(user);
+      this.props.history.push('/');
     } catch (err) {
       if (err.response.data === 'Not Found') {
         this.errorsClear();
@@ -48,10 +47,7 @@ class SignIn extends React.Component {
   }
 
   errorsClear = () => {
-    this.setState({
-      userNameError: '',
-      passwordError: '',
-    });
+    this.setState({ userNameError: '', passwordError: '' });
   }
 
   onInputChange = (ev) => {
@@ -69,14 +65,12 @@ class SignIn extends React.Component {
 
     return (
       <StyledPage>
-
         <h1 className="sign-in-title">Sign In</h1>
 
         <form
           className="sign-in-form"
           onSubmit={this.onSubmit}
         >
-
           <TextField
             onChange={this.onInputChange}
             margin="normal"
@@ -114,15 +108,11 @@ class SignIn extends React.Component {
           </Button>
 
           <div className="help-links">
-
             <Link to="/restore-pass">Forgot password?</Link>
 
             <Link to="/auth/sign-up">Don't have an account? Sign Up</Link>
-
           </div>
-
         </form>
-
       </StyledPage>
     );
   }
@@ -135,4 +125,4 @@ const connectFunction = connect(
   },
 );
 
-export default connectFunction(SignIn);
+export default withRouter(connectFunction(SignIn));

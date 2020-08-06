@@ -1,29 +1,51 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { Switch, Route } from 'react-router-dom';
+import Board from 'pages/Board';
+import UserBoards from 'pages/UserBoards';
 
 import auth from './auth';
 
-const Router = () => {
+const Router = (props) => {
+  let array = routes;
+
+  if (!props.user) { array = auth; }
+
   return (
     <Switch>
-      {routes.map((route) => (
+      {array.map((route) => (
         <Route
           key={route.path}
           {...route}
         />
       ))}
+
+      <Route
+        path="/"
+        component={() => 404}
+      />
     </Switch>
   );
 };
 
 const routes = [
-  ...auth,
   {
     path: '/',
-    component: () => '404',
-    exact: false,
+    component: UserBoards,
+    exact: true,
+  },
+  {
+    path: '/board/sjj3owq2p',
+    component: Board,
+    exact: true,
   },
 ];
 
-export default Router;
+const connectFunction = connect(
+  ({ main }) => ({
+    user: main.user,
+  }),
+);
+
+export default connectFunction(Router);

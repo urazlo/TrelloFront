@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -54,7 +55,8 @@ class SignUp extends React.Component {
       const user = await signUp({ login, email, password });
       accessToken.set(user.token);
 
-      updateUser(user);
+      this.props.updateUser(user);
+      this.props.history.push('/');
     } catch (err) {
       if (err.response.data === 'This login is already exists') {
         this.errorsClear();
@@ -169,4 +171,4 @@ const connectFunction = connect(
   },
 );
 
-export default connectFunction(SignUp);
+export default withRouter(connectFunction(SignUp));

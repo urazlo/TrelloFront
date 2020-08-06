@@ -4,17 +4,17 @@ import config from 'config';
 
 axios.defaults.baseURL = config.apiBaseUrl;
 
-axios.interceptors.request.use((request) => {
-  request.headers.authorization = `Bearer ${accessToken.get()}`;
-  return request;
+axios.interceptors.request.use((req) => {
+  req.headers.authorization = `Bearer ${accessToken.get()}`;
+  return req;
 });
 
 axios.interceptors.response.use(
   ({ data }) => {
     return data;
   },
-  (error) => {
-    return Promise.reject(error);
+  (err) => {
+    return Promise.reject(err);
   },
 );
 

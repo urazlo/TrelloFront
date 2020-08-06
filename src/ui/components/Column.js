@@ -95,14 +95,17 @@ class Column extends React.Component {
   }
 
   render() {
-    const { cards, columnInputValue, cardInputValue, showInput, showMenu } = this.state;
+    const {
+      cards,
+      columnInputValue,
+      cardInputValue,
+      showInput,
+      showMenu,
+    } = this.state;
 
     return (
-
       <div className="column-wrapper">
-
         <StyledPage>
-
           <div
             onClick={this.onHeaderClickHandler}
             className="column-header"
@@ -120,16 +123,12 @@ class Column extends React.Component {
               />
             )}
 
-            <button
-              className="column-header-menu"
-            >
+            <button className="column-header-menu">
               ...
-              </button>
-
+            </button>
           </div>
 
           <div className="cards-list">
-
             {cards.map(({ id, title }) => (
               <Card
                 key={id}
@@ -138,29 +137,21 @@ class Column extends React.Component {
                 editCardTitle={this.editCardTitle}
               />
             ))}
-
           </div>
 
-          <div
-            className="column-footer"
-          >
-
+          <div className="column-footer">
             <div className="card-add-menu">
-
               <button
                 className="card-add-menu-open-button"
                 onClick={this.onMenuClickHandler}
               >
-
                 <span className="card-add-menu-placeholder">
                   + Add another card
-                  </span>
-
+                </span>
               </button>
 
               {showMenu && (
                 <div className="card-add-menu-wrapper">
-
                   <input
                     className="card-add-input"
                     placeholder="Enter the card title"
@@ -171,34 +162,26 @@ class Column extends React.Component {
                   />
 
                   <div className="card-add-menu">
-
                     <button
                       className="card-add-accept-button"
                       onClick={this.onAcceptClickHandler}
                     >
                       Add card
-                  </button>
+                    </button>
 
                     <button
                       className="card-add-cancel-button"
                       onClick={this.onCancelClickHandler}
                     >
                       Х
-                  </button>
-
+                    </button>
                   </div>
-
                 </div>
               )}
-
             </div>
-
           </div>
-
         </StyledPage>
-
       </div>
-
     );
   }
 }
@@ -211,6 +194,7 @@ const StyledPage = styled.div`
   max-height: 100%;
   white-space: normal;
   margin: 10px 5px;
+  border-radius: 3px;
 
   .column-header{
     padding: 10px 10px 5px 15px;
@@ -265,7 +249,7 @@ const StyledPage = styled.div`
     display: inline-block;
     vertical-align: top;
     white-space: nowrap;
-    }
+  }
 
   .card-add-menu-open-button{
     color: #5e6c84;
@@ -287,12 +271,20 @@ const StyledPage = styled.div`
 
   .card-add-input{
     background: #fff;
-    border: none;
     display: block;
     margin: 0;
     padding: 5px;
     height: 30px;
     font-size: 18px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 3px; 
+
+    &:focus{
+      outline: none;
+      border: 1px solid rgba(251, 106, 3, 0.64);
+      border-radius: 3px;
+    }
   }
 
   .card-add-menu-wrapper{
@@ -324,7 +316,7 @@ const StyledPage = styled.div`
     cursor: pointer;
 
     &:hover{
-    background-color: #5aac55;
+    background-color: #6ad24f;
     }
   }
 
@@ -334,6 +326,10 @@ const StyledPage = styled.div`
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
+
+    &:hover{
+      background-color: rgba(9,30,66,.13);
+    }
   }
 `;
 

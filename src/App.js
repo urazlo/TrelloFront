@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import Header from 'ui/components/Header';
 import Router from 'routes';
@@ -15,12 +16,14 @@ class App extends React.Component {
   async componentDidMount() {
     const user = await check().catch(() => null);
 
+    this.props.updateUser(user);
     this.setState({ isAuthenticated: true });
 
-    updateUser(user);
+    if (this.props.history.location.pathname === '/auth/sign-in' && user) {
+      this.props.history.push('/');
+    }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
     const { isAuthenticated } = this.state;
     if (!isAuthenticated) { return null; }
@@ -28,6 +31,7 @@ class App extends React.Component {
     return (
       <>
         <Header />
+
         <Router />
       </>
     );
@@ -43,4 +47,4 @@ const connectFunction = connect(
   },
 );
 
-export default connectFunction(App);
+export default withRouter(connectFunction(App));

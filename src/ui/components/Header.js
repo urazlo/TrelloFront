@@ -1,7 +1,10 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
+import { updateUser } from 'store/main/actions';
 
 import logoImage from 'ui/images/logo.png';
 
@@ -14,34 +17,30 @@ class Header extends React.Component {
     this.setState({ value: e.target.value });
   }
 
+  onLogoutClickHandler = () => {
+    localStorage.removeItem('accessToken');
+    this.props.updateUser(null);
+  }
+
   render() {
     return (
       <HeaderStyle>
-
         <div className="header-left-side">
-
           <div>
-
             <button className="header-button">
-
               <Link className="header-button-icon" to="/">
                 H
               </Link>
 
             </button>
-
           </div>
 
           <div>
-
             <button className="header-button">
-
               <span className="header-button-icon">
                 B
               </span>
-
             </button>
-
           </div>
 
           <div className="header-search-field">
@@ -62,8 +61,8 @@ class Header extends React.Component {
           </div>
         </div>
 
-        <Link className="header-logo" to="/">
-          <img src={logoImage} alt="logo" />
+        <Link to="/">
+          <img className="header-logo" src={logoImage} alt="logo" />
         </Link>
 
         <div className="header-right-side">
@@ -77,8 +76,10 @@ class Header extends React.Component {
 
           <div>
             <button className="header-button">
-              <span className="header-button-icon">
-                P
+              <span
+                onClick={this.onLogoutClickHandler}
+                className="header-button-icon">
+                Logout
               </span>
             </button>
           </div>
@@ -105,7 +106,7 @@ const HeaderStyle = styled.div`
 
   .header-button{
     border: 0;
-    border-radius: 4px;
+    border-radius: 3px;
     cursor: pointer;
     text-decoration: none;
     align-items: center;
@@ -117,9 +118,7 @@ const HeaderStyle = styled.div`
     line-height: 32px;
     margin-right: 4px;
     padding: 0;
-    width: 32px;
     font-size: 25px;
-    
 
     &:hover{
       background-color: hsla(0,0%,100%,.4);
@@ -153,13 +152,12 @@ const HeaderStyle = styled.div`
   .header-search-button-icon{}
 
   .header-logo{
-    /* background-image: url(header-logo-2x.01ef898811a879595cea.png); */
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
     width: 85px;
     position: absolute;
-    left: 50%;
+    left: calc(50% - 44.5px);
     height: 32px;
   }
 
@@ -170,4 +168,10 @@ const HeaderStyle = styled.div`
   }
 `;
 
-export default Header;
+const connectFunction = connect(
+  null,
+  {
+    updateUser,
+  },
+);
+export default connectFunction(Header);

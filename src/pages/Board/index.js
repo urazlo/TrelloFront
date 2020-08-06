@@ -76,11 +76,8 @@ class Board extends React.Component {
     const { columns, value, showMenu } = this.state;
     return (
       <StyledPage>
-
         <div className="board">
-
           <div className="column-list-wrapper">
-
             {columns.map(({ id, title }) => (
               <Column
                 key={id}
@@ -90,26 +87,18 @@ class Board extends React.Component {
               />
             ))}
 
-            <div
-              className="column-add-menu column-wrapper"
-            >
-
+            <div className="column-add-menu column-wrapper">
               <button
                 className="column-add-menu-open-button"
                 onClick={this.onMenuClickHandler}
               >
-
                 <span className="column-add-menu-open-placeholder">
                   + Add another column
                 </span>
-
               </button>
 
               {showMenu && (
-                <div
-                  className="column-add-menu-wrapper"
-                >
-
+                <div className="column-add-menu-wrapper">
                   <input
                     className="column-add-input"
                     placeholder="Enter the column title"
@@ -119,34 +108,26 @@ class Board extends React.Component {
                     onChange={this.onChangeHandler}
                   />
 
-                  <div
-                    className="column-add">
-
+                  <div className="column-add">
                     <button
                       className="column-add-accept-button"
                       onClick={this.onAcceptClickHandler}
                     >
                       Add column
-                  </button>
+                    </button>
 
                     <button
                       className="column-add-cancel-button"
                       onClick={this.onCancelClickHandler}
                     >
                       X
-                  </button>
-
+                    </button>
                   </div>
-
                 </div>
               )}
-
             </div>
-
           </div>
-
         </div>
-
       </StyledPage>
     );
   }

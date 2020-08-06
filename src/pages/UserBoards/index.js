@@ -52,12 +52,10 @@ class BorderList extends React.Component {
     const { boards, value } = this.state;
     return (
       <StyledPage>
-
         <div className="boards-wrapper">
-
           <div className="boards-section-header">
             Personal boards
-            </div>
+          </div>
 
           <ul className="boards-section-list">
 
@@ -70,7 +68,6 @@ class BorderList extends React.Component {
             ))}
 
             <li className="boards-section-add-board">
-
               <input
                 className="add-board-input"
                 placeholder="Create board"
@@ -79,13 +76,9 @@ class BorderList extends React.Component {
                 onKeyDown={this.onInputKeyDown}
                 onChange={this.onChangeHandler}
               />
-
             </li>
-
           </ul>
-
         </div>
-
       </StyledPage>
     );
   }

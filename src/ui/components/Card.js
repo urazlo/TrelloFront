@@ -77,10 +77,10 @@ const StyledPage = styled.div`
   text-decoration: none;
 
   .card-details{
-    background:#fff;
+    background: #fff;
     border-radius: 3px;
     padding: 4px;
-    position:relative;
+    position: relative;
 
     &:hover .card-details-edit-button{
       opacity: 1;

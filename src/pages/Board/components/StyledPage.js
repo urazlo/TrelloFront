@@ -45,6 +45,7 @@ export default styled.div`
     margin: 10px 5px;
     padding: 5px;
     position: relative;
+    border-radius: 3px;
 
     &:hover{
     background-color: hsla(0,0%,100%,.34);
@@ -74,12 +75,20 @@ export default styled.div`
 
   .column-add-input{
     background: #fff;
-    border: none;
     display: block;
     margin: 0;
     padding: 5px;
     height: 30px;
     font-size: 18px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 3px; 
+
+    &:focus{
+      outline: none;
+      border: 1px solid rgba(251, 106, 3, 0.64);
+      border-radius: 3px;
+    }
   }
 
 .column-add{}
@@ -97,6 +106,10 @@ export default styled.div`
     font-size: 18px;
     padding: 5px;
     cursor: pointer;
+
+    &:hover{
+    background-color: #6ad24f;
+    }
   }
 
   .column-add-cancel-button{
@@ -105,5 +118,9 @@ export default styled.div`
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
+
+    &:hover{
+      background-color: rgba(9,30,66,.13);
+    }
   }
 `;
