@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -19,7 +18,9 @@ class App extends React.Component {
     this.props.updateUser(user);
     this.setState({ isAuthenticated: true });
 
-    if (this.props.history.location.pathname === '/auth/sign-in' && user) {
+    if ((this.props.history.location.pathname
+      === '/auth/sign-in' || '/auth/sign-up')
+      && user) {
       this.props.history.push('/');
     }
   }
