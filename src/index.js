@@ -8,16 +8,19 @@ import store from 'store';
 
 import * as serviceWorker from 'serviceWorker';
 import GlobalStyles from 'styles/GlobalStyles';
+import MaterialTheme from 'styles/MaterialTheme';
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <>
-        <GlobalStyles />
+    <MaterialTheme>
+      <BrowserRouter>
+        <>
+          <GlobalStyles />
 
-        <App />
-      </>
-    </BrowserRouter>
+          <App />
+        </>
+      </BrowserRouter>
+    </MaterialTheme>
   </Provider>,
   document.getElementById('root'),
 );

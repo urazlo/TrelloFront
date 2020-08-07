@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Switch, Route } from 'react-router-dom';
 import Board from 'pages/Board';
+import Profile from 'pages/Profile';
 import UserBoards from 'pages/UserBoards';
 
 import auth from './auth';
@@ -31,13 +32,18 @@ const Router = (props) => {
 
 const routes = [
   {
-    path: '/',
+    path: '/:id',
     component: UserBoards,
     exact: true,
   },
   {
     path: '/board/sjj3owq2p',
     component: Board,
+    exact: true,
+  },
+  {
+    path: '/:id/profile',
+    component: Profile,
     exact: true,
   },
 ];

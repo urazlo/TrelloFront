@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
 import { connect } from 'react-redux';
@@ -32,7 +32,7 @@ class SignIn extends React.Component {
       accessToken.set(user.token);
 
       this.props.updateUser(user);
-      this.props.history.push('/');
+      this.props.history.push(`/${user.user._id}`);
     } catch (err) {
       if (err.response.data === 'Not Found') {
         this.errorsClear();

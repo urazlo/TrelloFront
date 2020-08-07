@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
 import { connect } from 'react-redux';
@@ -52,11 +53,11 @@ class SignUp extends React.Component {
         return this.setState({ passwordError: 'Invalid password' });
       }
 
-      const user = await signUp({ login, email, password });
-      accessToken.set(user.token);
+      const { user, token } = await signUp({ login, email, password });
+      accessToken.set(token);
 
       this.props.updateUser(user);
-      this.props.history.push('/');
+      this.props.history.push(`/${user._id}`);
     } catch (err) {
       if (err.response.data === 'This login is already exists') {
         this.errorsClear();

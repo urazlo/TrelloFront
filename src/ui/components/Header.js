@@ -1,42 +1,57 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
-
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import { withRouter } from 'react-router';
 import styled from 'styled-components';
-import { updateUser } from 'store/main/actions';
 
+import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+
 import logoImage from 'ui/images/logo.png';
+import avatarImage from 'ui/images/avatar.png';
+
+import { updateUser } from 'store/main/actions';
 
 class Header extends React.Component {
   state = {
     value: '',
-    showMenu: false,
+    anchorEl: null,
   }
 
-  onChangeHandler = (e) => {
-    this.setState({ value: e.target.value });
+  handleClick = (ev) => {
+    this.setState({ anchorEl: ev.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  onChangeHandler = (ev) => {
+    this.setState({ value: ev.target.value });
   }
 
   onLogoutClickHandler = () => {
-    this.setState({ showMenu: true });
-    // localStorage.removeItem('accessToken');
-    // this.props.updateUser(null);
+    localStorage.removeItem('accessToken');
+    this.props.updateUser(null);
   }
 
   render() {
-    const { value, showMenu } = this.state;
+    const { value, anchorEl } = this.state;
     return (
       <HeaderStyle>
         <div className="header-left-side">
           <div>
             <button className="header-button">
-              <Link className="header-button-icon" to="/">
+              <Link className="header-button-icon" to={`/${this.props.user._id}`}>
                 <HomeIcon />
               </Link>
-
             </button>
           </div>
 
@@ -58,6 +73,7 @@ class Header extends React.Component {
               value={value}
               onChange={this.onChangeHandler}
             />
+
             <button className="header-search-button">
               <span className="header-search-button-icon">
                 S
@@ -65,7 +81,8 @@ class Header extends React.Component {
             </button>
           </div>
         </div>
-        <Link to="/">
+
+        <Link to={`/${this.props.user._id}`}>
           <img className="header-logo" src={logoImage} alt="logo" />
         </Link>
 
@@ -77,46 +94,41 @@ class Header extends React.Component {
               </span>
             </button>
           </div>
-
           <div>
-            <button>
-              <span
-                onClick={this.onLogoutClickHandler}
-                className="account-icon">
-              </span>
+            <Button
+              aria-controls="customized-menu"
+              aria-haspopup="true"
+              variant="contained"
+              color="primary"
+              onClick={this.handleClick}
+            >
+              <img className="account-icon" src={avatarImage} alt="avatar" />
+            </Button>
+            <Menu
+              id="customized-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={this.handleClose}
+            >
+              <ListItemIcon>
+                <AccountBoxIcon fontSize="small" />
+              </ListItemIcon>
 
-            </button>
+              <Link to={`/${this.props.user._id}/profile`}>
+                <ListItemText primary="Profile" />
+              </Link>
+
+              <ListItemIcon>
+                <ExitToAppIcon fontSize="small" />
+              </ListItemIcon>
+
+              <Link to='/auth/sign-in'>
+                <ListItemText onClick={this.onLogoutClickHandler} primary="Logout" />
+              </Link>
+            </Menu>
           </div>
         </div>
-        {showMenu && (
-          <nav className="account-menu">
-            <div className="account-menu-header">
-              <div className="account-menu-header-title">Account</div>
-
-              <div className="account-menu-header-close-button">
-                X
-              </div>
-            </div>
-
-            <div className="account-menu-user">
-              <div className="account-menu-user-icon"></div>
-
-              <div className="account-menu-user-info">
-                <span className="account-menu-user-info-username">
-                  username
-                </span>
-
-                <span className="account-menu-user-info-email">
-                  email
-                </span>
-              </div>
-            </div>
-
-            <div className="account-menu-user-page">Profile</div>
-
-            <div className="account-menu-logout">Log Out</div>
-          </nav>
-        )}
       </HeaderStyle>
     );
   }
@@ -210,7 +222,6 @@ const HeaderStyle = styled.div`
     height: 32px;
     cursor: pointer;
     width: 32px;
-    background-image: url(https://trello-members.s3.amazonaws.com/5bfd30ebc8b1b8405ecfa81a/b5bcd7a0159b21e10680c583eb43322b/50.png);
   }
 
   .account-menu{
@@ -229,6 +240,7 @@ const HeaderStyle = styled.div`
     box-sizing: border-box;
     outline: 0;
     overflow: hidden;
+    flex-direction: column;
   }
 
   .account-menu-header{
@@ -236,7 +248,6 @@ const HeaderStyle = styled.div`
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
-    border-bottom: 1px solid rgba(9,30,66,.13);
     color: #5e6c84;
     height: 40px;
     display: block;
@@ -247,67 +258,91 @@ const HeaderStyle = styled.div`
     position: relative;
   }
 
-  .account-menu-header-title{}
+  .account-menu-header-title{
+    text-align: center;
+  }
   .account-menu-header-close-button{
     height: auto;
     width: 10px;
   }
 
-  .account-menu-user{
+  .account-menu-content{
+    border-top: 1px solid rgba(9,30,66,.13);
     display: flex;
+    padding: 10px;
+    border-bottom: 1px solid rgba(9,30,66,.13);
   }
 
-  .account-menu-user-icon{
-    align-items: center;
-    background-color: #dfe1e6;
+  .account-menu-content-icon{
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
-    border: 0;
     border-radius: 100%;
-    box-sizing: border-box;
-    color: #172b4d;
     display: inline-flex;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    justify-content: center;
-    line-height: 28px;
-    opacity: 1;
-    height: 28px;
-    width: 28px;
-    overflow: hidden;
-    white-space: nowrap;
+    cursor: pointer;
     background-image: url(https://trello-members.s3.amazonaws.com/5bfd30ebc8b1b8405ecfa81a/b5bcd7a0159b21e10680c583eb43322b/50.png);
     height: 40px;
     width: 40px;
-    line-height: 40px;
   }
 
-  .account-menu-user-info{
-
+  .account-menu-content-info{
+    margin-left: 10px;
   }
 
-  .account-menu-user-info-username{
-
+  .account-menu-content-info-username{
+    margin-top: 4px;
+    max-width: 230px;
   }
 
-  .account-menu-user-info-email{
-
+  .account-menu-content-info-email{
+    font-size: 9pt;
+    color: #b3bac5;
+    display: block;
+    overflow: hidden;
+    max-width: 230px;
   }
 
   .account-menu-user-page{
 
   }
+
   .account-menu-logout{
 
+  }
+
+  .account-menu-option{
+    background-color: transparent;
+    border: none;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    color: #172b4d;
+    display: block;
+    height: 100%;
+    padding: 6px 12px;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+    transition: none;
+    margin: 0;
+    outline: 0;
+
+    &:hover{
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      color: #172b4d;
+      background: rgba(9,30,66,.04);
+    }
   }
 `;
 
 const connectFunction = connect(
-  null,
+  ({ main }) => ({
+    user: main.user,
+  }),
   {
     updateUser,
   },
 );
-export default connectFunction(Header);
+export default withRouter(connectFunction(Header));

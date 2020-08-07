@@ -8,6 +8,7 @@ export default createGlobalStyle`
     font-weight: 400;
     margin: 0 auto;
     overflow-y : hidden;
+    font-family: sans-serif;
   }
 
   button {

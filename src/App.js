@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -18,10 +19,11 @@ class App extends React.Component {
     this.props.updateUser(user);
     this.setState({ isAuthenticated: true });
 
-    if ((this.props.history.location.pathname
-      === '/auth/sign-in' || '/auth/sign-up')
-      && user) {
-      this.props.history.push('/');
+    if (this.props.history.location.pathname === '/auth/sign-in' && user) {
+      this.props.history.push(`/${user.user._id}`);
+    }
+    if (this.props.history.location.pathname === '/auth/sign-up' && user) {
+      this.props.history.push(`/${user.user._id}`);
     }
   }
 
