@@ -28,11 +28,11 @@ class SignIn extends React.Component {
       ev.preventDefault();
       const { userName, password } = this.state;
 
-      const user = await signIn({ userName, password });
-      accessToken.set(user.token);
+      const { user, token} = await signIn({ userName, password });
+      accessToken.set(token);
 
       this.props.updateUser(user);
-      this.props.history.push(`/${user.user._id}`);
+      this.props.history.push(`/${user._id}`);
     } catch (err) {
       if (err.response.data === 'Not Found') {
         this.errorsClear();

@@ -20,10 +20,10 @@ class App extends React.Component {
     this.setState({ isAuthenticated: true });
 
     if (this.props.history.location.pathname === '/auth/sign-in' && user) {
-      this.props.history.push(`/${user.user._id}`);
+      this.props.history.push(`/${user?._id}`);
     }
     if (this.props.history.location.pathname === '/auth/sign-up' && user) {
-      this.props.history.push(`/${user.user._id}`);
+      this.props.history.push(`/${user?._id}`);
     }
   }
 

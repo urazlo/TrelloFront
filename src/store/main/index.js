@@ -2,7 +2,6 @@ import { UPDATE_USER, LOGOUT_USER } from './actionNames';
 
 const getInitialStore = () => ({
   user: null,
-  kek: 'asd',
 });
 
 export default (

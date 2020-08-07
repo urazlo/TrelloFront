@@ -44,12 +44,13 @@ class Header extends React.Component {
 
   render() {
     const { value, anchorEl } = this.state;
+
     return (
       <HeaderStyle>
         <div className="header-left-side">
           <div>
             <button className="header-button">
-              <Link className="header-button-icon" to={`/${this.props.user._id}`}>
+              <Link className="header-button-icon" to={`/${this.props.user?._id}`}>
                 <HomeIcon />
               </Link>
             </button>
@@ -75,14 +76,12 @@ class Header extends React.Component {
             />
 
             <button className="header-search-button">
-              <span className="header-search-button-icon">
-                S
-              </span>
+              S
             </button>
           </div>
         </div>
 
-        <Link to={`/${this.props.user._id}`}>
+        <Link to={`/${this.props.user?._id}`}>
           <img className="header-logo" src={logoImage} alt="logo" />
         </Link>
 
@@ -115,7 +114,7 @@ class Header extends React.Component {
                 <AccountBoxIcon fontSize="small" />
               </ListItemIcon>
 
-              <Link to={`/${this.props.user._id}/profile`}>
+              <Link to={`/${this.props.user?._id}/profile`}>
                 <ListItemText primary="Profile" />
               </Link>
 
