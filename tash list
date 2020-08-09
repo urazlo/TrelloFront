@@ -1,0 +1,111 @@
+[1mdiff --git a/src/api/userApi.js b/src/api/userApi.js[m
+[1mindex a65e29c..07bd3fa 100644[m
+[1m--- a/src/api/userApi.js[m
+[1m+++ b/src/api/userApi.js[m
+[36m@@ -1,32 +1,16 @@[m
+[31m-/* eslint-disable no-console */[m
+[31m-// import config from 'config';[m
+ import axios from './axios';[m
+ [m
+[31m-const path = 'auth';[m
+[32m+[m[32mconst path = 'user';[m
+ [m
+[31m-export const signUp = ({ login, email, password }) => {[m
+[32m+[m[32mexport const editUser = ({ login, email, id, password, newPassword }) => {[m
+   return axios({[m
+[31m-    url: `/${path}/sign-up`,[m
+[31m-    method: 'POST',[m
+[32m+[m[32m    url: `/${path}/${id}`,[m
+[32m+[m[32m    method: 'PATCH',[m
+     data: {[m
+       login,[m
+       email,[m
+       password,[m
+[32m+[m[32m      newPassword,[m
+     },[m
+   });[m
+ };[m
+[31m-[m
+[31m-export const signIn = ({ userName, password }) => {[m
+[31m-  return axios({[m
+[31m-    url: `/${path}/sign-in`,[m
+[31m-    method: 'POST',[m
+[31m-    data: {[m
+[31m-      userName,[m
+[31m-      password,[m
+[31m-    },[m
+[31m-  });[m
+[31m-};[m
+[31m-[m
+[31m-export const check = () => {[m
+[31m-  return axios.get(`/${path}/check`);[m
+[31m-};[m
+[1mdiff --git a/src/pages/Profile/index.js b/src/pages/Profile/index.js[m
+[1mindex da9c6b7..024ac6b 100644[m
+[1m--- a/src/pages/Profile/index.js[m
+[1m+++ b/src/pages/Profile/index.js[m
+[36m@@ -1,4 +1,6 @@[m
+ /* eslint-disable no-underscore-dangle */[m
+[32m+[m[32m/* eslint-disable no-console */[m
+[32m+[m
+ import React from 'react';[m
+ [m
+ import { connect } from 'react-redux';[m
+[36m@@ -8,72 +10,205 @@[m [mimport avatarImage from 'ui/images/avatar.png';[m
+ import TextField from '@material-ui/core/TextField';[m
+ import Button from '@material-ui/core/Button';[m
+ import StyledPage from 'pages/Profile/components/StyledPage';[m
+[32m+[m[32mimport { editUser } from 'api/userApi';[m
+[32m+[m[32mimport { updateUser } from 'store/main/actions';[m
+ [m
+ class Profile extends React.Component {[m
+   state = {[m
+[31m-    login: this.props.user.login,[m
+[31m-    email: this.props.user.email,[m
+[32m+[m[32m    login: this.props.user?.login,[m
+[32m+[m[32m    email: this.props.user?.email,[m
+[32m+[m[32m    password: '',[m
+[32m+[m[32m    newPassword: '',[m
+[32m+[m[32m    confirmPassword: '',[m
+[32m+[m[32m    passwordError: '',[m
+[32m+[m[32m    newPasswordError: '',[m
+[32m+[m[32m    confirmPasswordError: '',[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  onInputChange = (ev) => {[m
+[32m+[m[32m    this.errorsClear();[m
+[32m+[m[32m    this.setState({ [ev.target.name]: ev.target.value });[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  onSubmit = async (ev) => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      ev.preventDefault();[m
+[32m+[m[32m      const { login, email } = this.state;[m
+[32m+[m[32m      const id = this.props.user?._id;[m
+[32m+[m
+[32m+[m[32m      const user = await editUser({ login, email, id });[m
+[32m+[m[32m      this.props.updateUser(user);[m
+[32m+[m[32m    } catch (err) {[m
+[32m+[m[32m      console.log(err);[m
+[32m+[m[32m    }[m
+   }[m
+ [m
+[31m-  onChangeHandler = (ev) => {[m
+[31m-    // console.log(ev.target);[m
+[31m-    this.setState({ login: ev.target.value });[m
+[32m+[m[32m  onSubmitPasswordChange = async (ev) => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      ev.preventDefault();[m
+[32m+[m[32m      const { password, newPassword, confirmPassword } = this.state;[m
+[32m+[m[32m      const id = this.props.user?._id;[m
+[32m+[m[32m      const noWhiteSpacesPattern = /^\S*$/;[m
+[32m+[m
+[32m+[m[32m      if (newPassword !== confirmPassword) {[m
+[32m+[m[32m        this.errorsClear();[m
+[32m+[m[32m        return this.setState({[m
+[32m+[m[32m          confirmPasswordError: 'Passwords must match',[m
+[32m+[m[32m        });[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      if (newPassword.toString().length < 6 || !noWhiteSpacesPattern.test(newPassword)) {[m
+[32m
