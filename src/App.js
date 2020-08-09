@@ -19,10 +19,15 @@ class App extends React.Component {
     this.props.updateUser(user);
     this.setState({ isAuthenticated: true });
 
-    if (this.props.history.location.pathname === '/auth/sign-in' && user) {
+    if (!user) {
+      this.props.history.push('/auth/sign-in');
+    }
+
+    if (this.props.location.pathname === '/auth/sign-in' && user) {
       this.props.history.push(`/${user?._id}`);
     }
-    if (this.props.history.location.pathname === '/auth/sign-up' && user) {
+
+    if (this.props.location.pathname === '/auth/sign-up' && user) {
       this.props.history.push(`/${user?._id}`);
     }
   }

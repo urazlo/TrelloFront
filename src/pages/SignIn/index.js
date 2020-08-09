@@ -28,7 +28,7 @@ class SignIn extends React.Component {
       ev.preventDefault();
       const { userName, password } = this.state;
 
-      const { user, token} = await signIn({ userName, password });
+      const { user, token } = await signIn({ userName, password });
       accessToken.set(token);
 
       this.props.updateUser(user);
