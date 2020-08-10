@@ -15,20 +15,16 @@ import { accessToken } from 'utils';
 import { updateUser } from 'store/main/actions';
 
 class SignUp extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    login: '',
+    loginError: '',
 
-    this.state = {
-      login: '',
-      loginError: '',
+    email: '',
+    emailError: '',
 
-      email: '',
-      emailError: '',
-
-      password: '',
-      passwordError: '',
-    };
-  }
+    password: '',
+    passwordError: '',
+  };
 
   onSubmit = async (ev) => {
     try {

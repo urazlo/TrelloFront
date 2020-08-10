@@ -12,77 +12,131 @@ import Button from '@material-ui/core/Button';
 import StyledPage from 'pages/Profile/components/StyledPage';
 import { editUser } from 'api/userApi';
 import { updateUser } from 'store/main/actions';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import LockIcon from '@material-ui/icons/Lock';
+import InfoIcon from '@material-ui/icons/Info';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 class Profile extends React.Component {
   state = {
+    open: false,
     login: this.props.user?.login,
     email: this.props.user?.email,
     password: '',
     newPassword: '',
     confirmPassword: '',
+    loginError: '',
+    emailError: '',
     passwordError: '',
     newPasswordError: '',
     confirmPasswordError: '',
   }
 
   onInputChange = (ev) => {
-    this.errorsClear();
+    this.clearError();
     this.setState({ [ev.target.name]: ev.target.value });
+  };
+
+  handleClick = () => {
+    const { open } = this.state;
+    this.setState({ open: !open });
   };
 
   onSubmit = async (ev) => {
     try {
       ev.preventDefault();
-      const { login, email } = this.state;
+      this.clearError();
+      const {
+        login,
+        email,
+        password,
+        newPassword,
+        confirmPassword,
+      } = this.state;
       const id = this.props.user?._id;
+      const loginPattern = /^\S*$/;
+      const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-      const user = await editUser({ login, email, id });
+      if (login.toString().length < 3 || !loginPattern.test(login)) {
+        return this.setState({ loginError: 'Invalid login' });
+      }
+
+      if (!emailPattern.test(email)) {
+        return this.setState({ emailError: 'Invalid email' });
+      }
+
+      if (password || newPassword || confirmPassword) {
+        if (!password) {
+          return this.setState({
+            passwordError: 'Please fill out this field',
+            open: true,
+          });
+        }
+
+        if (
+          !this.isPasswordValid(password, 'passwordError') ||
+          !this.isPasswordValid(newPassword, 'newPasswordError') ||
+          !this.isPasswordValid(confirmPassword, 'confirmPasswordError')
+        ) {
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          return this.setState({
+            confirmPasswordError: 'Passwords must match',
+            open: true,
+          });
+        }
+      }
+
+      const user = await editUser({ id, login, email, password, newPassword });
       this.props.updateUser(user);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  onSubmitPasswordChange = async (ev) => {
-    try {
-      ev.preventDefault();
-      const { password, newPassword, confirmPassword } = this.state;
-      const id = this.props.user?._id;
-      const noWhiteSpacesPattern = /^\S*$/;
-
-      if (newPassword !== confirmPassword) {
-        this.errorsClear();
-        return this.setState({
-          confirmPasswordError: 'Passwords must match',
-        });
-      }
-
-      if (newPassword.toString().length < 6 || !noWhiteSpacesPattern.test(newPassword)) {
-        this.errorsClear();
-        return this.setState({
-          newPasswordError: 'Invalid password',
-        });
-      }
-
-      if (confirmPassword.toString().length < 6 || !noWhiteSpacesPattern.test(confirmPassword)) {
-        this.errorsClear();
-        return this.setState({
-          confirmPasswordError: 'Invalid password',
-        });
-      }
-      const user = await editUser({ id, password, newPassword });
-      this.props.updateUser(user);
-      console.log('success');
+      this.setState({
+        login,
+        email,
+        password: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
     } catch (err) {
       if (err.response.data === 'Invalid password') {
-        this.errorsClear();
-        return this.setState({ passwordError: 'The old password was incorrect' });
+        return this.setState({
+          passwordError: 'The old password was incorrect',
+          open: true,
+        });
+      }
+
+      if (err.response.data === 'This login is already exists') {
+        return this.setState({ loginError: err.response.data });
+      }
+
+      if (err.response.data === 'This email is already exists') {
+        return this.setState({ emailError: err.response.data });
       }
     }
   }
 
-  errorsClear = () => {
+  isPasswordValid = (password, error) => {
+    const noWhiteSpacesPattern = /^\S*$/;
+
+    if (password.toString().length < 6 || !noWhiteSpacesPattern.test(password)) {
+      return this.setState({
+        [error]: 'Invalid password',
+        open: true,
+      });
+    }
+    return true;
+  }
+
+  clearError = () => {
     this.setState({
+      loginError: '',
+      emailError: '',
       passwordError: '',
       newPasswordError: '',
       confirmPasswordError: '',
@@ -99,116 +153,123 @@ class Profile extends React.Component {
       passwordError,
       newPasswordError,
       confirmPasswordError,
+      loginError,
+      emailError,
+      open,
     } = this.state;
     return (
       <StyledPage>
         <div className="profile-header">
           <img className="profile-header-icon" src={avatarImage} alt="avatar" />
 
-          <div className="profile-header-login">{this.props.user?.login}</div>
+          <div className="text-wrapper">
+            <div className="profile-header-login">{this.props.user?.login}</div>
 
-          <div className="profile-header-user-id">@{this.props.user?._id}</div>
-        </div>
-
-        <span className="profile-content-title">About</span>
-
-        <div className="profile-content">
-          <form
-            className="profile-content-form"
-            onSubmit={this.onSubmit}
-          >
-            <TextField
-              value={login}
-              label="Login"
-              name="login"
-              variant="outlined"
-              onChange={this.onInputChange}
-            />
-
-            <TextField
-              value={email}
-              label="Email"
-              name="email"
-              variant="outlined"
-              margin="normal"
-              onChange={this.onInputChange}
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
-              Save
-            </Button>
-          </form>
-
-          <div className="profile-content-avatar">
-            <span className="profile-content-avatar-text">Avatar</span>
-
-            <img className="profile-content-avatar-img" src={avatarImage} alt="avatar" />
+            <div className="profile-header-user-id">@{this.props.user?._id}</div>
           </div>
         </div>
 
-        <div className="profile-content">
-          <form
-            className="profile-content-form"
-            onSubmit={this.onSubmitPasswordChange}
-          >
-            <TextField
-              value={password}
-              label="Old Password"
-              name="password"
-              variant="outlined"
-              type="password"
-              required
-              error={Boolean(passwordError)}
-              helperText={passwordError}
-              onChange={this.onInputChange}
-            />
+        <div className="profile-content-wrapper">
+          <ListItemIcon>
+            <InfoIcon color="primary" />
 
-            <TextField
-              value={newPassword}
-              label="New Password"
-              name="newPassword"
-              variant="outlined"
-              margin="normal"
-              type="password"
-              required
-              error={Boolean(newPasswordError)}
-              helperText={newPasswordError}
-              onChange={this.onInputChange}
-            />
+            <span className="profile-content-title">About</span>
+          </ListItemIcon>
 
-            <TextField
-              value={confirmPassword}
-              label="New Password (again)"
-              name="confirmPassword"
-              variant="outlined"
-              margin="normal"
-              type="password"
-              required
-              helperText={confirmPasswordError}
-              error={Boolean(confirmPasswordError)}
-              onChange={this.onInputChange}
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
+          <div className="profile-content">
+            <List
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              className="profile-content-form"
             >
-              Change password
-            </Button>
-          </form>
-        </div>
+              <form onSubmit={this.onSubmit}>
+                <TextField
+                  value={login}
+                  label="Login"
+                  name="login"
+                  variant="outlined"
+                  onChange={this.onInputChange}
+                  error={Boolean(loginError)}
+                  helperText={loginError}
+                />
 
-        <Button
-          variant="contained"
-          color="primary"
-        >
-          Change password
-            </Button>
+                <TextField
+                  value={email}
+                  label="Email"
+                  name="email"
+                  variant="outlined"
+                  onChange={this.onInputChange}
+                  error={Boolean(emailError)}
+                  helperText={emailError}
+                  margin={"normal"}
+                />
+
+                <ListItem button onClick={this.handleClick}>
+                  <ListItemIcon>
+                    <LockIcon color="primary" />
+                  </ListItemIcon>
+
+                  <ListItemText primary="Change password" />
+                  {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <TextField
+                      value={password}
+                      label="Old Password"
+                      name="password"
+                      variant="outlined"
+                      type="password"
+                      required
+                      error={Boolean(passwordError)}
+                      helperText={passwordError}
+                      onChange={this.onInputChange}
+                    />
+
+                    <TextField
+                      value={newPassword}
+                      label="New Password"
+                      name="newPassword"
+                      variant="outlined"
+                      type="password"
+                      required
+                      error={Boolean(newPasswordError)}
+                      helperText={newPasswordError}
+                      onChange={this.onInputChange}
+                    />
+
+                    <TextField
+                      value={confirmPassword}
+                      label="New Password (again)"
+                      name="confirmPassword"
+                      variant="outlined"
+                      type="password"
+                      required
+                      helperText={confirmPasswordError}
+                      error={Boolean(confirmPasswordError)}
+                      onChange={this.onInputChange}
+                    />
+                  </List>
+                </Collapse>
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                >
+                  Save
+                </Button>
+              </form>
+            </List>
+
+            <div className="profile-content-avatar">
+              <span className="profile-content-avatar-text">Avatar</span>
+
+              <img className="profile-content-avatar-img" src={avatarImage} alt="avatar" />
+            </div>
+          </div>
+        </div>
       </StyledPage>
     );
   }

@@ -19,6 +19,10 @@ export default createGlobalStyle`
     border-radius: 3px;
   }
 
+  a{
+    text-decoration: none;
+  }
+  
   .hidden{
     display: none;
   }

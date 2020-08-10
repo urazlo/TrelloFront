@@ -9,10 +9,13 @@ import HomeIcon from '@material-ui/icons/Home';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AddIcon from '@material-ui/icons/Add';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import Fade from '@material-ui/core/Fade';
 
 import logoImage from 'ui/images/logo.png';
 import avatarImage from 'ui/images/avatar.png';
@@ -48,20 +51,12 @@ class Header extends React.Component {
     return (
       <HeaderStyle>
         <div className="header-left-side">
-          <div>
-            <button className="header-button">
-              <Link className="header-button-icon" to={`/${this.props.user?._id}`}>
-                <HomeIcon />
-              </Link>
-            </button>
-          </div>
+          <Link className="header-button " to={`/${this.props.user?._id}`}>
+            <HomeIcon className="header-button-icon" />
+          </Link>
 
-          <div>
-            <button className="header-button">
-              <span className="header-button-icon">
-                <DashboardIcon />
-              </span>
-            </button>
+          <div className="header-button">
+            <DashboardIcon className="header-button-icon" />
           </div>
 
           <div className="header-search-field">
@@ -74,10 +69,6 @@ class Header extends React.Component {
               value={value}
               onChange={this.onChangeHandler}
             />
-
-            <button className="header-search-button">
-              S
-            </button>
           </div>
         </div>
 
@@ -86,47 +77,48 @@ class Header extends React.Component {
         </Link>
 
         <div className="header-right-side">
-          <div>
-            <button className="header-button">
-              <span className="header-button-icon">
-                +
-              </span>
-            </button>
+          <div className="header-button">
+            <AddIcon className="header-button-icon" />
           </div>
-          <div>
-            <Button
-              aria-controls="customized-menu"
-              aria-haspopup="true"
-              variant="contained"
-              color="primary"
-              onClick={this.handleClick}
-            >
-              <img className="account-icon" src={avatarImage} alt="avatar" />
-            </Button>
-            <Menu
-              id="customized-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={this.handleClose}
-            >
+
+          <img
+            onClick={this.handleClick}
+            className="account-icon"
+            src={avatarImage}
+            alt="avatar"
+          />
+
+          <Menu
+            id="customized-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={this.handleClose}
+            TransitionComponent={Fade}
+            elevation={15}
+            anchorReference="anchorPosition"
+            anchorPosition={{ top: 40, left: 1800 }}
+          >
+            <ListItem>
               <ListItemIcon>
-                <AccountBoxIcon fontSize="small" />
+                <AccountBoxIcon />
               </ListItemIcon>
 
               <Link to={`/${this.props.user?._id}/profile`}>
                 <ListItemText primary="Profile" />
               </Link>
+            </ListItem>
 
+            <ListItem>
               <ListItemIcon>
-                <ExitToAppIcon fontSize="small" />
+                <ExitToAppIcon />
               </ListItemIcon>
 
               <Link to='/auth/sign-in'>
                 <ListItemText onClick={this.onLogoutClickHandler} primary="Logout" />
               </Link>
-            </Menu>
-          </div>
+            </ListItem>
+          </Menu>
         </div>
       </HeaderStyle>
     );

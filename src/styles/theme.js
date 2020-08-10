@@ -7,6 +7,31 @@ window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 export default createMuiTheme({
   overrides: {
+    MuiList: {
+      root: {
+        width: '250px',
+      },
+    },
+    MuiButton: {
+      root: {
+        width: '224px',
+        marginLeft: '4px',
+      },
+    },
+    TextField: {
+      root: {
+      },
+    },
+    MuiTextField: {
+      root: {
+        margin: '4px',
+      },
+    },
+    MuiOutlinedInput: {
+      input: {
+        padding: '12px',
+      },
+    },
   },
   palette: {
     common: {
@@ -14,7 +39,7 @@ export default createMuiTheme({
       white: '#fff',
     },
     primary: {
-      main: '#302B34',
+      main: '#026aa7',
       light: 'rgb(71, 145, 219)',
       dark: 'rgb(17, 82, 147)',
       contrastText: '#fff',
