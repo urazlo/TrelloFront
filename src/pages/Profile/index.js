@@ -201,7 +201,7 @@ class Profile extends React.Component {
                   onChange={this.onInputChange}
                   error={Boolean(emailError)}
                   helperText={emailError}
-                  margin={"normal"}
+                  margin={'normal'}
                 />
 
                 <ListItem button onClick={this.handleClick}>

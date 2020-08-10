@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
