@@ -7,6 +7,15 @@ window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 export default createMuiTheme({
   overrides: {
+    MuiListItem: {
+      root: {
+        borderRadius: '3px',
+      },
+      gutters: {
+        paddingLeft: '2px',
+        paddingRight: '2px',
+      },
+    },
     MuiList: {
       root: {
         width: '250px',

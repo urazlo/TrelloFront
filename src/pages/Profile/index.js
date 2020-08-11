@@ -6,35 +6,58 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import avatarImage from 'ui/images/avatar.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import StyledPage from 'pages/Profile/components/StyledPage';
-import { editUser } from 'api/userApi';
-import { updateUser } from 'store/main/actions';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Collapse from '@material-ui/core/Collapse';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
 import LockIcon from '@material-ui/icons/Lock';
 import InfoIcon from '@material-ui/icons/Info';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import StyledPage from 'pages/Profile/components/StyledPage';
+
+import { updateUser } from 'store/main/actions';
+import { editUser, uploadUserAvatar } from 'api/userApi';
+import avatarImage from 'ui/images/avatar.png';
 
 class Profile extends React.Component {
-  state = {
-    open: false,
-    login: this.props.user?.login,
-    email: this.props.user?.email,
-    password: '',
-    newPassword: '',
-    confirmPassword: '',
-    loginError: '',
-    emailError: '',
-    passwordError: '',
-    newPasswordError: '',
-    confirmPasswordError: '',
+  constructor(props) {
+    super(props);
+    this.imageInput = React.createRef();
+    this.state = {
+      open: false,
+      login: this.props.user?.login,
+      email: this.props.user?.email,
+      password: '',
+      newPassword: '',
+      confirmPassword: '',
+      loginError: '',
+      emailError: '',
+      passwordError: '',
+      newPasswordError: '',
+      confirmPasswordError: '',
+      // file: null,
+    };
+  }
+
+  onAvatarChanger = async (ev) => {
+    try {
+      const avatar = ev.target.files[0];
+
+      await uploadUserAvatar(avatar);
+
+      // this.props.updateUser(user);
+      // this.setState({ file: null });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  onClickInput = () => {
+    this.imageInput.current.click();
   }
 
   onInputChange = (ev) => {
@@ -80,8 +103,7 @@ class Profile extends React.Component {
 
         if (
           !this.isPasswordValid(password, 'passwordError') ||
-          !this.isPasswordValid(newPassword, 'newPasswordError') ||
-          !this.isPasswordValid(confirmPassword, 'confirmPasswordError')
+          !this.isPasswordValid(newPassword, 'newPasswordError')
         ) {
           return;
         }
@@ -102,6 +124,7 @@ class Profile extends React.Component {
         password: '',
         newPassword: '',
         confirmPassword: '',
+        open: false,
       });
     } catch (err) {
       if (err.response.data === 'Invalid password') {
@@ -257,6 +280,7 @@ class Profile extends React.Component {
                   type="submit"
                   variant="contained"
                   color="primary"
+                  className=""
                 >
                   Save
                 </Button>
@@ -266,7 +290,20 @@ class Profile extends React.Component {
             <div className="profile-content-avatar">
               <span className="profile-content-avatar-text">Avatar</span>
 
-              <img className="profile-content-avatar-img" src={avatarImage} alt="avatar" />
+              <img
+                className="profile-content-avatar-img"
+                src={avatarImage}
+                alt="avatar"
+                onClick={this.onClickInput}
+              />
+
+              <input
+                ref={this.imageInput}
+                name="userAvatar"
+                type="file"
+                className="hidden"
+                onChange={this.onAvatarChanger}
+              />
             </div>
           </div>
         </div>
