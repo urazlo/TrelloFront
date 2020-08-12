@@ -21,7 +21,7 @@ import StyledPage from 'pages/Profile/components/StyledPage';
 
 import { updateUser } from 'store/main/actions';
 import { editUser, uploadUserAvatar } from 'api/userApi';
-import avatarImage from 'ui/images/avatar.png';
+import avatarImage from 'ui/images/avatar.jpg';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -31,6 +31,7 @@ class Profile extends React.Component {
       open: false,
       login: this.props.user?.login,
       email: this.props.user?.email,
+      avatar: this.props.user?.avatar,
       password: '',
       newPassword: '',
       confirmPassword: '',
@@ -39,7 +40,6 @@ class Profile extends React.Component {
       passwordError: '',
       newPasswordError: '',
       confirmPasswordError: '',
-      // file: null,
     };
   }
 
@@ -47,12 +47,14 @@ class Profile extends React.Component {
     try {
       const avatar = ev.target.files[0];
 
-      await uploadUserAvatar(avatar);
+      const user = await uploadUserAvatar(avatar);
 
-      // this.props.updateUser(user);
-      // this.setState({ file: null });
+      this.props.updateUser(user);
+      this.setState({ avatar: this.props.user?.avatar });
     } catch (err) {
-      console.log(err);
+      if (err.message === 'Error: Not a valid image format!') {
+        return console.log(err.message);
+      }
     }
   }
 
@@ -179,11 +181,16 @@ class Profile extends React.Component {
       loginError,
       emailError,
       open,
+      avatar,
     } = this.state;
     return (
       <StyledPage>
         <div className="profile-header">
-          <img className="profile-header-icon" src={avatarImage} alt="avatar" />
+          <img
+            className="profile-header-icon"
+            src={avatar || avatarImage}
+            alt="avatar"
+          />
 
           <div className="text-wrapper">
             <div className="profile-header-login">{this.props.user?.login}</div>
@@ -292,14 +299,14 @@ class Profile extends React.Component {
 
               <img
                 className="profile-content-avatar-img"
-                src={avatarImage}
+                src={avatar || avatarImage}
                 alt="avatar"
                 onClick={this.onClickInput}
               />
 
               <input
                 ref={this.imageInput}
-                name="userAvatar"
+                name="avatar"
                 type="file"
                 className="hidden"
                 onChange={this.onAvatarChanger}

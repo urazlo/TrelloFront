@@ -17,7 +17,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Fade from '@material-ui/core/Fade';
 
 import logoImage from 'ui/images/logo.png';
-import avatarImage from 'ui/images/avatar.png';
+import defaultAvatar from 'ui/images/avatar.jpg';
 
 import { updateUser } from 'store/main/actions';
 
@@ -83,7 +83,7 @@ class Header extends React.Component {
           <img
             onClick={this.handleClick}
             className="account-icon"
-            src={avatarImage}
+            src={this.props.user?.avatar || defaultAvatar}
             alt="avatar"
           />
 
