@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
+/* eslint no-param-reassign: "error" */
 
 import React from 'react';
 
@@ -82,6 +83,10 @@ class Profile extends React.Component {
     const { open } = this.state;
     this.setState({ open: !open });
   };
+
+  onClickTargetReseter = (ev) => {
+    ev.target.value = null;
+  }
 
   onSubmit = async (ev) => {
     try {
@@ -341,6 +346,7 @@ class Profile extends React.Component {
                 type="file"
                 className="hidden"
                 onChange={this.onAvatarChanger}
+                onClick={this.onClickTargetReseter}
                 accept="image/jpeg,image/png,image/jpg"
               />
             </div>
