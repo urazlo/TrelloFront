@@ -21,11 +21,10 @@ export default styled.main`
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 100%;
-    display: inline-flex;
-    cursor: pointer;
     height: 48px;
     width: 48px;
     margin-right: 10px;
+    border: 1px solid #00000057;
   }
 
   .text-wrapper{
@@ -46,8 +45,18 @@ export default styled.main`
     line-height: 20px;
     color: #5e6c84;
   }
+
+  .change-password-menu{
+    padding: 2px;
+    margin-bottom: 4px;
+  }
   
   .profile-content-wrapper{
+    margin: 0 auto;
+  }
+
+  .profile-content{
+    display: flex;
     margin: 0 auto;
   }
 
@@ -59,22 +68,28 @@ export default styled.main`
     margin-left: 10px;
   }
 
-  .profile-content{
-    display: flex;
-    margin: 0 auto;
-  }
-
   .profile-content-form{
     display: flex;
     flex-direction: column;
     max-width: 300px;
   }
 
+  .profile-content-form-field{
+    display: flex;
+    margin: 7px 0;
+    align-self: center;
+  }
+
+  .profile-content-form-submit-button{
+    width: 154px;
+    align-self: center;
+  }
+
   .profile-content-avatar{
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin: 16px;
+    margin: 0 0 10px 30px;
   }
 
   .profile-content-avatar-text{
@@ -82,19 +97,42 @@ export default styled.main`
     font-size: 14px;
     font-weight: 600;
     line-height: 16px;
-    margin-top: 16px;
-    margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .profile-content-avatar-img{
     height: 100px;
     width: 100px;
+    position: relative;
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 100%;
     display: inline-flex;
     cursor: pointer;
+    border: 1px solid #00000057;
+  }
+
+  .avatar-change-button{
+    opacity: 0;
+    background: linear-gradient(0deg,rgba(0,0,0,0.3) 50%,transparent 0);
+    border-radius: 100%;
+    color: #fff;
+    padding-top: 5%;
+    position: absolute;
+    padding-bottom: 5px;
+    padding: 40px 18px;
+    text-decoration: underline;
+    top: 204px;
+    font-size: 18px;
+    cursor: pointer;
+
+    &:hover{
+      opacity: 1;
+    }
+  }
+
+  .avatar-change-error{
+    color: red;
   }
   `;

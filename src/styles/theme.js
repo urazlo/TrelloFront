@@ -10,6 +10,18 @@ export default createMuiTheme({
     MuiListItem: {
       root: {
         borderRadius: '3px',
+
+        '&$selected': {
+          backgroundColor: 'rgba(0, 0, 0, 0.08)',
+        },
+
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+        },
+
+        '&:focus': {
+          outline: 'none',
+        },
       },
       gutters: {
         paddingLeft: '2px',
@@ -20,25 +32,9 @@ export default createMuiTheme({
       root: {
         width: '250px',
       },
-    },
-    MuiButton: {
-      root: {
-        width: '224px',
-        marginLeft: '4px',
-      },
-    },
-    TextField: {
-      root: {
-      },
-    },
-    MuiTextField: {
-      root: {
-        margin: '4px',
-      },
-    },
-    MuiOutlinedInput: {
-      input: {
-        padding: '12px',
+      padding: {
+        paddingTop: 0,
+        paddingBottom: 0,
       },
     },
   },

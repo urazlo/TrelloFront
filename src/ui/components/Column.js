@@ -111,7 +111,6 @@ class Column extends React.Component {
             className="column-header"
           >
             {columnInputValue}
-
             {showInput && (
               <input
                 autoFocus

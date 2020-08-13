@@ -15,17 +15,11 @@ class DemoBoard extends React.Component {
     const { boardTitle } = this.props;
     return (
       <StyledPage>
-
         <li className="boards-section-list-item">
-
           <Link className="list-item-title-wrapper" to={this.state.link}>
-
             <div className="list-item-title">{boardTitle}</div>
-
           </Link>
-
         </li>
-
       </StyledPage>
     );
   }

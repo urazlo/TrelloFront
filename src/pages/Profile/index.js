@@ -40,6 +40,7 @@ class Profile extends React.Component {
       passwordError: '',
       newPasswordError: '',
       confirmPasswordError: '',
+      avatarChangeError: '',
     };
   }
 
@@ -52,14 +53,24 @@ class Profile extends React.Component {
       this.props.updateUser(user);
       this.setState({ avatar: this.props.user?.avatar });
     } catch (err) {
-      if (err.message === 'Error: Not a valid image format!') {
-        return console.log(err.message);
-      }
+      this.setState({ avatarChangeError: 'Invalid File!' });
     }
   }
 
   onClickInput = () => {
     this.imageInput.current.click();
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this.onWindowClickListener);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onWindowClickListener);
+  }
+
+  onWindowClickListener = () => {
+    this.setState({ avatarChangeError: '' });
   }
 
   onInputChange = (ev) => {
@@ -178,6 +189,7 @@ class Profile extends React.Component {
       passwordError,
       newPasswordError,
       confirmPasswordError,
+      avatarChangeError,
       loginError,
       emailError,
       open,
@@ -210,9 +222,11 @@ class Profile extends React.Component {
             <List
               component="nav"
               aria-labelledby="nested-list-subheader"
-              className="profile-content-form"
             >
-              <form onSubmit={this.onSubmit}>
+              <form
+                className="profile-content-form"
+                onSubmit={this.onSubmit}
+              >
                 <TextField
                   value={login}
                   label="Login"
@@ -231,10 +245,13 @@ class Profile extends React.Component {
                   onChange={this.onInputChange}
                   error={Boolean(emailError)}
                   helperText={emailError}
-                  margin={'normal'}
+                  margin='normal'
                 />
 
-                <ListItem button onClick={this.handleClick}>
+                <ListItem
+                  className="change-password-menu"
+                  onClick={this.handleClick}
+                >
                   <ListItemIcon>
                     <LockIcon color="primary" />
                   </ListItemIcon>
@@ -244,7 +261,7 @@ class Profile extends React.Component {
                 </ListItem>
 
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
+                  <List component="div">
                     <TextField
                       value={password}
                       label="Old Password"
@@ -252,6 +269,7 @@ class Profile extends React.Component {
                       variant="outlined"
                       type="password"
                       required
+                      className="profile-content-form-field"
                       error={Boolean(passwordError)}
                       helperText={passwordError}
                       onChange={this.onInputChange}
@@ -264,6 +282,8 @@ class Profile extends React.Component {
                       variant="outlined"
                       type="password"
                       required
+                      margin='normal'
+                      className="profile-content-form-field"
                       error={Boolean(newPasswordError)}
                       helperText={newPasswordError}
                       onChange={this.onInputChange}
@@ -275,6 +295,7 @@ class Profile extends React.Component {
                       name="confirmPassword"
                       variant="outlined"
                       type="password"
+                      className="profile-content-form-field"
                       required
                       helperText={confirmPasswordError}
                       error={Boolean(confirmPasswordError)}
@@ -287,7 +308,7 @@ class Profile extends React.Component {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  className=""
+                  className="profile-content-form-submit-button"
                 >
                   Save
                 </Button>
@@ -301,8 +322,18 @@ class Profile extends React.Component {
                 className="profile-content-avatar-img"
                 src={avatar || avatarImage}
                 alt="avatar"
-                onClick={this.onClickInput}
               />
+
+              <button
+                className="avatar-change-button"
+                onClick={this.onClickInput}
+              >
+                Change
+              </button>
+
+              <span className="avatar-change-error">
+                {avatarChangeError}
+              </span>
 
               <input
                 ref={this.imageInput}
@@ -310,6 +341,7 @@ class Profile extends React.Component {
                 type="file"
                 className="hidden"
                 onChange={this.onAvatarChanger}
+                accept="image/jpeg,image/png,image/jpg"
               />
             </div>
           </div>

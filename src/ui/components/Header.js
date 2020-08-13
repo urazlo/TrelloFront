@@ -5,18 +5,20 @@ import { withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import CloseIcon from '@material-ui/icons/Close';
 import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AddIcon from '@material-ui/icons/Add';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import Fade from '@material-ui/core/Fade';
 
-import logoImage from 'ui/images/logo.png';
+import unauthorizedLogoImage from 'ui/images/trello-logo-black.svg';
+import authorizedLogoImage from 'ui/images/logo.png';
 import defaultAvatar from 'ui/images/avatar.jpg';
 
 import { updateUser } from 'store/main/actions';
@@ -39,16 +41,48 @@ class Header extends React.Component {
     this.setState({ value: ev.target.value });
   }
 
-  onLogoutClickHandler = () => {
+  onLogoutHandler = () => {
     localStorage.removeItem('accessToken');
     this.props.updateUser(null);
+    this.handleClose();
   }
 
   render() {
     const { value, anchorEl } = this.state;
 
+    if (!this.props.user) {
+      return (
+        <UnauthorizedHeaderStyle>
+          <Link to={`/${this.props.user?._id}`}>
+            <img className="header-logo" src={unauthorizedLogoImage} alt="logo" />
+          </Link>
+
+          <div className="header-buttons">
+            <Link to='/auth/sign-in'>
+              <Button
+                variant="contained"
+                color="primary"
+                className="header-buttons-sign-in header--button"
+              >
+                Log in
+              </Button>
+            </Link>
+
+            <Link to='/auth/sign-up'>
+              <Button
+                variant="contained"
+                color="primary"
+                className="header-buttons-sign-up header--button"
+              >
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        </UnauthorizedHeaderStyle>
+      );
+    }
     return (
-      <HeaderStyle>
+      <AuthorizedHeaderStyle>
         <div className="header-left-side">
           <Link className="header-button " to={`/${this.props.user?._id}`}>
             <HomeIcon className="header-button-icon" />
@@ -72,7 +106,7 @@ class Header extends React.Component {
         </div>
 
         <Link to={`/${this.props.user?._id}`}>
-          <img className="header-logo" src={logoImage} alt="logo" />
+          <img className="header-logo" src={authorizedLogoImage} alt="logo" />
         </Link>
 
         <div className="header-right-side">
@@ -87,44 +121,76 @@ class Header extends React.Component {
             alt="avatar"
           />
 
-          <Menu
-            id="customized-menu"
+          <StyledMenu
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
             onClose={this.handleClose}
-            TransitionComponent={Fade}
-            elevation={15}
-            anchorReference="anchorPosition"
-            anchorPosition={{ top: 40, left: 1800 }}
+            marginThreshold={43}
           >
-            <ListItem>
-              <ListItemIcon>
-                <AccountBoxIcon />
-              </ListItemIcon>
+            <div className="header-menu">
+              <div className="header-menu-title">Account</div>
 
-              <Link to={`/${this.props.user?._id}/profile`}>
+              <CloseIcon className="header-menu-close-button" />
+            </div>
+            <ListItem
+              className="hover-cancelator"
+              divider={true}
+            >
+              <div className="header-menu-info">
+                <img
+                  src={this.props.user?.avatar || defaultAvatar}
+                  alt="avatar"
+                  className="header-menu-info-avatar"
+                />
+
+                <div>
+                  <div className="header-menu-info-login">
+                    {this.props.user?.login}
+                  </div>
+
+                  <div className="header-menu-info-email">
+                    {this.props.user?.email}
+                  </div>
+                </div>
+              </div>
+            </ListItem>
+
+            <Link to={`/${this.props.user?._id}/profile`}>
+              <ListItem
+                divider={true}
+                className="header-menu-list"
+                onClick={this.handleClose}
+                selected={window.location.pathname.includes('/profile')}
+              >
+                <ListItemIcon>
+                  <AccountBoxIcon color="primary" />
+                </ListItemIcon>
+
                 <ListItemText primary="Profile" />
-              </Link>
-            </ListItem>
+              </ListItem>
+            </Link>
 
-            <ListItem>
-              <ListItemIcon>
-                <ExitToAppIcon />
-              </ListItemIcon>
+            <Link to='/auth/sign-in'>
+              <ListItem
+                className="header-menu-list"
+                onClick={this.onLogoutHandler}
+              >
+                <ListItemIcon>
+                  <ExitToAppIcon color="primary" />
+                </ListItemIcon>
 
-              <Link to='/auth/sign-in'>
-                <ListItemText onClick={this.onLogoutClickHandler} primary="Logout" />
-              </Link>
-            </ListItem>
-          </Menu>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            </Link>
+          </StyledMenu>
         </div>
-      </HeaderStyle>
+      </AuthorizedHeaderStyle>
     );
   }
 }
 
-const HeaderStyle = styled.div`
+const AuthorizedHeaderStyle = styled.div`
   background-color: #026aa7;
   box-sizing: border-box;
   display: flex;
@@ -213,117 +279,121 @@ const HeaderStyle = styled.div`
     cursor: pointer;
     width: 32px;
   }
+`;
 
-  .account-menu{
-    display: flex;
-    position: fixed; 
-    width: 304px; 
-    top: 45px; 
-    right: 5px;
-    color: #172b4d;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
-    box-sizing: border-box;
-    outline: 0;
-    overflow: hidden;
-    flex-direction: column;
+const UnauthorizedHeaderStyle = styled.div`
+  background-color: #F8F9F9;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
+  padding: 4px;
+  width: 100%;
+  justify-content: space-between;
+
+  .header-logo{
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 50px;
   }
 
-  .account-menu-header{
-    color: #172b4d;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    color: #5e6c84;
-    height: 40px;
-    display: block;
-    line-height: 40px;
-    margin: 0;
-    overflow: hidden;
-    padding: 0 32px;
+  .header-buttons{
+    display: flex;
+    align-self: center;
+  }
+
+  .header-buttons-sign-in{
+    background-color: #E2E4E6;
+    color: hsl(0,0%,45%);
+    box-shadow: 0 2px 0 #CDD2D4;
+
+    &:hover{
+      color: hsl(0,0%,30%);
+      background-color: #D6DADC;
+    }
+  }
+
+  .header-buttons-sign-up{
+    background-color: #5AAC44;
+    box-shadow: 0 2px 0 #3F6F21;
+
+    &:hover{
+      background-color: #5AAB44;
+    }
+  }
+
+  .header--button{
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 11px;
+    margin-right: 24px;
+  }
+`;
+
+const StyledMenu = styled(Menu)`
+  .header-menu{
+    display: flex;
     position: relative;
+    box-sizing: border-box;
+    align-items: center;
+    padding: 8px 0;
+    color: #5e6c84;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    &:focus{
+      outline: 0;
+    }
   }
 
-  .account-menu-header-title{
-    text-align: center;
-  }
-  .account-menu-header-close-button{
-    height: auto;
-    width: 10px;
+  .header-menu-title{
+    margin: 0 auto;
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+    color: #172b4d;
   }
 
-  .account-menu-content{
-    border-top: 1px solid rgba(9,30,66,.13);
+  .header-menu-list{
+    margin: 5px;
+  }
+
+  .header-menu-info{
     display: flex;
-    padding: 10px;
-    border-bottom: 1px solid rgba(9,30,66,.13);
   }
 
-  .account-menu-content-icon{
+  .header-menu-info-avatar{
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 100%;
     display: inline-flex;
-    cursor: pointer;
-    background-image: url(https://trello-members.s3.amazonaws.com/5bfd30ebc8b1b8405ecfa81a/b5bcd7a0159b21e10680c583eb43322b/50.png);
     height: 40px;
     width: 40px;
+    padding: 4px 8px 4px 12px;
   }
 
-  .account-menu-content-info{
-    margin-left: 10px;
-  }
-
-  .account-menu-content-info-username{
-    margin-top: 4px;
-    max-width: 230px;
-  }
-
-  .account-menu-content-info-email{
-    font-size: 9pt;
+  .header-menu-info-email{
+    font-size: 14px;
     color: #b3bac5;
     display: block;
+    text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 230px;
   }
 
-  .account-menu-user-page{
-
+  .header-menu-info-login{
+    margin-top: 4px;
   }
 
-  .account-menu-logout{
-
-  }
-
-  .account-menu-option{
-    background-color: transparent;
-    border: none;
-    background: #fff;
-    border-radius: 0;
-    box-shadow: none;
-    color: #172b4d;
-    display: block;
-    height: 100%;
-    padding: 6px 12px;
-    text-align: left;
-    text-decoration: none;
-    width: 100%;
-    transition: none;
-    margin: 0;
-    outline: 0;
+  .header-menu-close-button{
+    color: #6b778c;
+    margin-right: 7px;
 
     &:hover{
-      background-color: transparent;
-      border: none;
-      box-shadow: none;
-      color: #172b4d;
-      background: rgba(9,30,66,.04);
+      color: #000;
     }
+  }
+
+  .hover-cancelator{
+    pointer-events: none;
   }
 `;
 
