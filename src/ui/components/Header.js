@@ -194,10 +194,10 @@ const AuthorizedHeaderStyle = styled.div`
   background-color: #026aa7;
   box-sizing: border-box;
   display: flex;
-  overflow: hidden;
   padding: 4px;
   max-height: 40px;
   width: 100%;
+  overflow: hidden;
 
   .header-left-side{
     display: flex;

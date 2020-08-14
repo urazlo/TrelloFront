@@ -23,8 +23,7 @@ export default styled.main`
     border-radius: 100%;
     height: 48px;
     width: 48px;
-    margin-right: 10px;
-    border: 1px solid #00000057;
+    margin-right: 14px;
   }
 
   .text-wrapper{
@@ -34,15 +33,13 @@ export default styled.main`
 
   .profile-header-login{
     font-size: 24px;
-    font-weight: 500;
     line-height: 28px;
     color: #0c3953;
     margin-right: 10px;
   }
 
   .profile-header-user-id{
-    font-size: 12px;
-    line-height: 20px;
+    font-size: 13px;
     color: #5e6c84;
   }
 
@@ -134,5 +131,19 @@ export default styled.main`
 
   .avatar-change-error{
     color: red;
+  }
+
+  .success-operation-notification{
+    background-color: #61bd4f;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 700;
+    overflow: hidden;
+    padding: 10px;
+    width: 50px;
+    font-size: 17px;
+    position: absolute;
+    top: 45px;
+    right: 5px;
   }
   `;

@@ -73,7 +73,6 @@ class SignIn extends React.Component {
         >
           <TextField
             onChange={this.onInputChange}
-            margin="normal"
             variant="outlined"
             required
             fullWidth
@@ -82,11 +81,11 @@ class SignIn extends React.Component {
             value={userName}
             error={Boolean(userNameError)}
             helperText={userNameError}
+            className="sign-in-form-field"
           />
 
           <TextField
             onChange={this.onInputChange}
-            margin="normal"
             variant="outlined"
             required
             fullWidth
@@ -96,6 +95,7 @@ class SignIn extends React.Component {
             value={password}
             error={Boolean(passwordError)}
             helperText={passwordError}
+            className="sign-in-form-field"
           />
 
           <Button

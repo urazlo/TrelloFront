@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
-/* eslint no-param-reassign: "error" */
 
 import React from 'react';
 
@@ -48,11 +47,12 @@ class Profile extends React.Component {
   onAvatarChanger = async (ev) => {
     try {
       const avatar = ev.target.files[0];
-
       const user = await uploadUserAvatar(avatar);
 
       this.props.updateUser(user);
+
       this.setState({ avatar: this.props.user?.avatar });
+      this.imageInput.current.value = '';
     } catch (err) {
       this.setState({ avatarChangeError: 'Invalid File!' });
     }
@@ -83,10 +83,6 @@ class Profile extends React.Component {
     const { open } = this.state;
     this.setState({ open: !open });
   };
-
-  onClickTargetReseter = (ev) => {
-    ev.target.value = null;
-  }
 
   onSubmit = async (ev) => {
     try {
@@ -136,6 +132,7 @@ class Profile extends React.Component {
 
       const user = await editUser({ id, login, email, password, newPassword });
       this.props.updateUser(user);
+
       this.setState({
         login,
         email,
@@ -240,6 +237,7 @@ class Profile extends React.Component {
                   onChange={this.onInputChange}
                   error={Boolean(loginError)}
                   helperText={loginError}
+                  className="profile-content-form-field"
                 />
 
                 <TextField
@@ -250,7 +248,7 @@ class Profile extends React.Component {
                   onChange={this.onInputChange}
                   error={Boolean(emailError)}
                   helperText={emailError}
-                  margin='normal'
+                  className="profile-content-form-field"
                 />
 
                 <ListItem
@@ -346,11 +344,13 @@ class Profile extends React.Component {
                 type="file"
                 className="hidden"
                 onChange={this.onAvatarChanger}
-                onClick={this.onClickTargetReseter}
                 accept="image/jpeg,image/png,image/jpg"
               />
             </div>
           </div>
+          {/* {showMessage && (<div className="success-operation-notification">
+            Saved
+          </div>)} */}
         </div>
       </StyledPage>
     );
