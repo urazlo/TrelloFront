@@ -53,7 +53,7 @@ class Header extends React.Component {
     if (!this.props.user) {
       return (
         <UnauthorizedHeaderStyle>
-          <Link to={`/${this.props.user?._id}`}>
+          <Link to={`/${this.props.user?.id}`}>
             <img className="header-logo" src={unauthorizedLogoImage} alt="logo" />
           </Link>
 
@@ -84,7 +84,7 @@ class Header extends React.Component {
     return (
       <AuthorizedHeaderStyle>
         <div className="header-left-side">
-          <Link className="header-button " to={`/${this.props.user?._id}`}>
+          <Link className="header-button " to={`/${this.props.user?.id}`}>
             <HomeIcon className="header-button-icon" />
           </Link>
 
@@ -105,7 +105,7 @@ class Header extends React.Component {
           </div>
         </div>
 
-        <Link to={`/${this.props.user?._id}`}>
+        <Link to={`/${this.props.user?.id}`}>
           <img className="header-logo" src={authorizedLogoImage} alt="logo" />
         </Link>
 
@@ -156,7 +156,7 @@ class Header extends React.Component {
               </div>
             </ListItem>
 
-            <Link to={`/${this.props.user?._id}/profile`}>
+            <Link to={`/${this.props.user?.id}/profile`}>
               <ListItem
                 divider={true}
                 className="header-menu-list"

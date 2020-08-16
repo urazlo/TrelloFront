@@ -24,11 +24,11 @@ class App extends React.Component {
     }
 
     if (this.props.location.pathname === '/auth/sign-in' && user) {
-      this.props.history.push(`/${user?._id}`);
+      this.props.history.push(`/${user?.id}`);
     }
 
     if (this.props.location.pathname === '/auth/sign-up' && user) {
-      this.props.history.push(`/${user?._id}`);
+      this.props.history.push(`/${user?.id}`);
     }
   }
 

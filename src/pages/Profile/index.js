@@ -95,7 +95,7 @@ class Profile extends React.Component {
         newPassword,
         confirmPassword,
       } = this.state;
-      const id = this.props.user?._id;
+      const id = this.props.user?.id;
       const loginPattern = /^\S*$/;
       const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -209,7 +209,7 @@ class Profile extends React.Component {
           <div className="text-wrapper">
             <div className="profile-header-login">{this.props.user?.login}</div>
 
-            <div className="profile-header-user-id">@{this.props.user?._id}</div>
+            <div className="profile-header-user-id">@{this.props.user?.id}</div>
           </div>
         </div>
 
