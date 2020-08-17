@@ -55,6 +55,7 @@ class SignUp extends React.Component {
       this.props.updateUser(user);
       this.props.history.push(`/${user.id}`);
     } catch (err) {
+      console.log(err.response.data);
       if (err.response.data === 'This login is already exists') {
         this.errorsClear();
         return this.setState({ loginError: err.response.data });

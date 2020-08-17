@@ -21,7 +21,7 @@ import StyledPage from 'pages/Profile/components/StyledPage';
 
 import { updateUser } from 'store/main/actions';
 import { editUser, uploadUserAvatar } from 'api/userApi';
-import avatarImage from 'ui/images/avatar.jpg';
+import defaultAvatar from 'ui/images/avatar.jpg';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class Profile extends React.Component {
       newPasswordError: '',
       confirmPasswordError: '',
       avatarChangeError: '',
+      showSuccessMessage: false,
     };
   }
 
@@ -51,8 +52,13 @@ class Profile extends React.Component {
 
       this.props.updateUser(user);
 
-      this.setState({ avatar: this.props.user?.avatar });
+      this.setState({
+        avatar: this.props.user?.avatar,
+        showSuccessMessage: true,
+      });
+
       this.imageInput.current.value = '';
+      setTimeout(() => this.setState({ showSuccessMessage: false }), 2000);
     } catch (err) {
       this.setState({ avatarChangeError: 'Invalid File!' });
     }
@@ -140,7 +146,9 @@ class Profile extends React.Component {
         newPassword: '',
         confirmPassword: '',
         open: false,
+        showSuccessMessage: true,
       });
+      setTimeout(() => this.setState({ showSuccessMessage: false }), 2000);
     } catch (err) {
       if (err.response.data === 'Invalid password') {
         return this.setState({
@@ -196,13 +204,14 @@ class Profile extends React.Component {
       emailError,
       open,
       avatar,
+      showSuccessMessage,
     } = this.state;
     return (
       <StyledPage>
         <div className="profile-header">
           <img
             className="profile-header-icon"
-            src={avatar || avatarImage}
+            src={avatar || defaultAvatar}
             alt="avatar"
           />
 
@@ -323,7 +332,7 @@ class Profile extends React.Component {
 
               <img
                 className="profile-content-avatar-img"
-                src={avatar || avatarImage}
+                src={avatar || defaultAvatar}
                 alt="avatar"
               />
 
@@ -348,9 +357,9 @@ class Profile extends React.Component {
               />
             </div>
           </div>
-          {/* {showMessage && (<div className="success-operation-notification">
+          {showSuccessMessage && (<div className="success-operation-notification">
             Saved
-          </div>)} */}
+          </div>)}
         </div>
       </StyledPage>
     );
