@@ -1,55 +1,51 @@
+/* eslint-disable no-console */
+
 import React from 'react';
 
-import BoardPreview from 'ui/components/BoardPreview';
+import { connect } from 'react-redux';
+
+// import BoardPreview from 'ui/components/BoardPreview';
+import { createBoard } from 'api/boardApi';
+import { updateUserBoards } from 'store/main/actions';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
-import { boardsStorage, getBoardId } from 'utils';
 
 class BorderList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      boards: boardsStorage.get(),
-    };
-  }
-
-  updateLocalStorage = () => {
-    boardsStorage.set(this.state.boards);
-  }
-
-  addBoard = () => {
-    const { boards, value } = this.state;
-
-    if (value.trim()) {
-      const board = {
-        id: getBoardId(),
-        title: value.trim(),
-      };
-
-      this.setState({
-        boards: [...boards, board],
-        value: '',
-      }, this.updateLocalStorage);
-    }
-  }
-
-  onInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      this.addBoard();
-    }
-
-    if (e.key === 'Escape') {
-      this.setState({ value: '' });
-    }
+  state = {
+    title: '',
   };
 
-  onChangeHandler = (e) => {
-    this.setState({ value: e.target.value });
+  addBoard = async () => {
+    try {
+      const { title } = this.state;
+
+      const board = await createBoard({ title });
+
+      this.props.updateUserBoards(board);
+
+      this.setState({ title: '' });
+    } catch (err) {
+      console.log(err.response.data);
+    }
   }
 
+  onChangeHandler = (ev) => {
+    this.setState({ title: ev.target.value });
+  }
+
+  onInputKeyDown = (ev) => {
+    if (ev.key === 'Enter') { this.addBoard(); }
+
+    if (ev.key === 'Escape') { this.setState({ title: '' }); }
+  }
+  // onInputChange = (ev) => {
+  //   this.clearError();
+  //   this.setState({ [ev.target.name]: ev.target.value });
+  // };
+
   render() {
-    const { boards, value } = this.state;
+    const { title } = this.state;
+
     return (
       <StyledPage>
         <div className="boards-wrapper">
@@ -58,21 +54,19 @@ class BorderList extends React.Component {
           </div>
 
           <ul className="boards-section-list">
-
-            {boards.map(({ id, title }) => (
+            {/* {this.props.boards.map(({ id, title }) => (
               <BoardPreview
                 key={id}
                 boardId={id}
                 boardTitle={title}
               />
-            ))}
-
+            ))} */}
             <li className="boards-section-add-board">
               <input
                 className="add-board-input"
                 placeholder="Create board"
                 autoFocus
-                value={value}
+                value={title}
                 onKeyDown={this.onInputKeyDown}
                 onChange={this.onChangeHandler}
               />
@@ -84,4 +78,14 @@ class BorderList extends React.Component {
   }
 }
 
-export default BorderList;
+const connectFunction = connect(
+  ({ main }) => ({
+    user: main.user,
+    boards: main.boards,
+  }),
+  {
+    updateUserBoards,
+  },
+);
+
+export default connectFunction(BorderList);
