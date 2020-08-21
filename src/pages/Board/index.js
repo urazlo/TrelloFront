@@ -1,42 +1,41 @@
+/* eslint-disable no-console */
+
 import React from 'react';
 
-import Column from 'ui/components/Column';
+import { connect } from 'react-redux';
 
+import Column from 'ui/components/Column';
+import { createColumn, getColumns, editColumnTitle } from 'api/columnApi';
+import { updateColumns, addColumn, editColumn } from 'store/main/actions';
 import StyledPage from 'pages/Board/components/StyledPage';
-import { columnsStorage, getColumnId } from 'utils';
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      columns: columnsStorage.get(),
-      showMenu: false,
-    };
+  state = {
+    title: '',
+    showMenu: false,
+  };
+
+  async componentDidMount() {
+    const columns = await getColumns(this.props.match.params.id);
+    this.props.updateColumns(columns);
   }
 
-  updateLocalStorage = () => {
-    columnsStorage.set(this.state.columns);
-  }
+  addColumn = async () => {
+    try {
+      const { title } = this.state;
+      const boardId = this.props.match.params.id;
+      const column = await createColumn({ title, boardId });
 
-  addColumn = () => {
-    const { columns, value } = this.state;
+      this.props.addColumn(column);
 
-    if (value.trim()) {
-      const column = {
-        id: getColumnId(),
-        title: value.trim(),
-      };
-
-      this.setState({
-        columns: [...columns, column],
-        value: '',
-      }, this.updateLocalStorage);
+      this.setState({ title: '' });
+    } catch (err) {
+      console.log(err.response.data);
     }
   }
 
   onChangeHandler = (e) => {
-    this.setState({ value: e.target.value });
+    this.setState({ title: e.target.value });
   }
 
   onInputKeyDown = (e) => {
@@ -46,17 +45,22 @@ class Board extends React.Component {
     }
 
     if (e.key === 'Escape') {
-      this.setState({ value: '', showMenu: false });
+      this.setState({ title: '', showMenu: false });
     }
   };
 
-  editColumnTitle = (id, text) => {
-    const { columns } = this.state;
+  editColumnTitle = async () => {
+    try {
+      const { title } = this.state;
+      const boardId = this.props.match.params.id;
+      const column = await editColumnTitle({ title, boardId });
 
-    const index = columns.findIndex((column) => column.id === id);
-    columns[index].title = text;
+      this.props.editColumn(column);
 
-    this.setState({ columns }, this.updateLocalStorage);
+      this.setState({ title: '' });
+    } catch (err) {
+      console.log(err.response.data);
+    }
   };
 
   onMenuClickHandler = () => {
@@ -69,16 +73,16 @@ class Board extends React.Component {
   }
 
   onCancelClickHandler = () => {
-    this.setState({ value: '', showMenu: false });
+    this.setState({ title: '', showMenu: false });
   }
 
   render() {
-    const { columns, value, showMenu } = this.state;
+    const { title, showMenu } = this.state;
     return (
       <StyledPage>
         <div className="board">
           <div className="column-list-wrapper">
-            {columns.map(({ id, title }) => (
+            {this.props.columns !== null && this.props.columns.map(({ id, title }) => (
               <Column
                 key={id}
                 columnId={id}
@@ -102,7 +106,7 @@ class Board extends React.Component {
                   <input
                     className="column-add-input"
                     placeholder="Enter the column title"
-                    value={value}
+                    value={title}
                     autoFocus
                     onKeyDown={this.onInputKeyDown}
                     onChange={this.onChangeHandler}
@@ -133,4 +137,15 @@ class Board extends React.Component {
   }
 }
 
-export default Board;
+const connectFunction = connect(
+  ({ main }) => ({
+    columns: main.columns,
+  }),
+  {
+    updateColumns,
+    addColumn,
+    editColumn,
+  },
+);
+
+export default connectFunction(Board);

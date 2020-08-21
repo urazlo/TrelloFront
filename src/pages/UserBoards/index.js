@@ -5,8 +5,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import BoardPreview from 'ui/components/BoardPreview';
-import { createBoard, getUserBoards } from 'api/boardApi';
-import { updateUserBoards, addUserBoard } from 'store/main/actions';
+import { createBoard, getBoards } from 'api/boardApi';
+import { updateBoards, addBoard } from 'store/main/actions';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
 
@@ -16,8 +16,8 @@ class BorderList extends React.Component {
   };
 
   async componentDidMount() {
-    const userBoards = await getUserBoards();
-    this.props.updateUserBoards(userBoards);
+    const boards = await getBoards();
+    this.props.updateBoards(boards);
   }
 
   addBoard = async () => {
@@ -26,7 +26,7 @@ class BorderList extends React.Component {
 
       const board = await createBoard(title);
 
-      this.props.addUserBoard(board);
+      this.props.addBoard(board);
 
       this.setState({ title: '' });
     } catch (err) {
@@ -85,8 +85,8 @@ const connectFunction = connect(
     boards: main.boards,
   }),
   {
-    updateUserBoards,
-    addUserBoard,
+    updateBoards,
+    addBoard,
   },
 );
 
