@@ -4,9 +4,9 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-// import BoardPreview from 'ui/components/BoardPreview';
-import { createBoard } from 'api/boardApi';
-import { updateUserBoards } from 'store/main/actions';
+import BoardPreview from 'ui/components/BoardPreview';
+import { createBoard, getUserBoards } from 'api/boardApi';
+import { updateUserBoards, addUserBoard } from 'store/main/actions';
 
 import StyledPage from 'pages/UserBoards/components/StyledPage';
 
@@ -15,13 +15,18 @@ class BorderList extends React.Component {
     title: '',
   };
 
+  async componentDidMount() {
+    const userBoards = await getUserBoards();
+    this.props.updateUserBoards(userBoards);
+  }
+
   addBoard = async () => {
     try {
       const { title } = this.state;
 
-      const board = await createBoard({ title });
+      const board = await createBoard(title);
 
-      this.props.updateUserBoards(board);
+      this.props.addUserBoard(board);
 
       this.setState({ title: '' });
     } catch (err) {
@@ -38,10 +43,6 @@ class BorderList extends React.Component {
 
     if (ev.key === 'Escape') { this.setState({ title: '' }); }
   }
-  // onInputChange = (ev) => {
-  //   this.clearError();
-  //   this.setState({ [ev.target.name]: ev.target.value });
-  // };
 
   render() {
     const { title } = this.state;
@@ -54,13 +55,13 @@ class BorderList extends React.Component {
           </div>
 
           <ul className="boards-section-list">
-            {/* {this.props.boards.map(({ id, title }) => (
+            {this.props.boards !== null && this.props.boards.map(({ id, title }) => (
               <BoardPreview
                 key={id}
                 boardId={id}
                 boardTitle={title}
               />
-            ))} */}
+            ))}
             <li className="boards-section-add-board">
               <input
                 className="add-board-input"
@@ -85,6 +86,7 @@ const connectFunction = connect(
   }),
   {
     updateUserBoards,
+    addUserBoard,
   },
 );
 

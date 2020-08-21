@@ -4,19 +4,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 class DemoBoard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      link: `/board/${this.props.boardId}`,
-    };
-  }
 
   render() {
-    const { boardTitle } = this.props;
+    const { boardTitle, boardId } = this.props;
     return (
       <StyledPage>
         <li className="boards-section-list-item">
-          <Link className="list-item-title-wrapper" to={this.state.link}>
+          <Link className="list-item-title-wrapper" to={`/board/${boardId}`}>
             <div className="list-item-title">{boardTitle}</div>
           </Link>
         </li>

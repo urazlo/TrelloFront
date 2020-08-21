@@ -10,7 +10,7 @@ import auth from './auth';
 
 const Router = (props) => {
   let array = routes;
-
+ 
   if (!props.user) { array = auth; }
 
   return (
@@ -37,7 +37,7 @@ const routes = [
     exact: true,
   },
   {
-    path: '/board/sjj3owq2p',
+    path: `/board/:id`,
     component: Board,
     exact: true,
   },
