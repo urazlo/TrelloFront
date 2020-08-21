@@ -14,4 +14,3 @@ export const addUserBoard = (data) => ({
   type: ADD_USER_BOARD,
   data,
 });
-

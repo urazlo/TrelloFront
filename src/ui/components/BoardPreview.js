@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 class DemoBoard extends React.Component {
-
   render() {
     const { boardTitle, boardId } = this.props;
     return (
