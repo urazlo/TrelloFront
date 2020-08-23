@@ -5,34 +5,52 @@ import {
   ADD_COLUMN,
   UPDATE_COLUMNS,
   EDIT_COLUMN,
+  UPDATE_CARDS,
+  ADD_CARD,
+  EDIT_CARD,
 } from './actionNames';
 
-export const updateUser = (data) => ({
+export const updateUserAction = (data) => ({
   type: UPDATE_USER,
   data,
 });
 
-export const updateBoards = (data) => ({
+export const updateBoardsAction = (data) => ({
   type: UPDATE_BOARDS,
   data,
 });
 
-export const addBoard = (data) => ({
+export const addBoardAction = (data) => ({
   type: ADD_BOARD,
   data,
 });
 
-export const updateColumns = (data) => ({
+export const updateColumnsAction = (data) => ({
   type: UPDATE_COLUMNS,
   data,
 });
 
-export const addColumn = (data) => ({
+export const addColumnAction = (data) => ({
   type: ADD_COLUMN,
   data,
 });
 
-export const editColumn = (data) => ({
+export const editColumnAction = (data) => ({
   type: EDIT_COLUMN,
+  data,
+});
+
+export const updateCardsAction = (data) => ({
+  type: UPDATE_CARDS,
+  data,
+});
+
+export const addCardAction = (data) => ({
+  type: ADD_CARD,
+  data,
+});
+
+export const editCardAction = (data) => ({
+  type: EDIT_CARD,
   data,
 });

@@ -21,7 +21,7 @@ import unauthorizedLogoImage from 'ui/images/trello-logo-black.svg';
 import authorizedLogoImage from 'ui/images/logo.png';
 import defaultAvatar from 'ui/images/avatar.jpg';
 
-import { updateUser } from 'store/main/actions';
+import { updateUserAction } from 'store/main/actions';
 
 class Header extends React.Component {
   state = {
@@ -43,7 +43,7 @@ class Header extends React.Component {
 
   onLogoutHandler = () => {
     localStorage.removeItem('accessToken');
-    this.props.updateUser(null);
+    this.props.updateUserAction(null);
     this.handleClose();
   }
 
@@ -402,7 +402,7 @@ const connectFunction = connect(
     user: main.user,
   }),
   {
-    updateUser,
+    updateUserAction,
   },
 );
 export default withRouter(connectFunction(Header));

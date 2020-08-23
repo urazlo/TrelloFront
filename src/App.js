@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import Header from 'ui/components/Header';
 import Router from 'routes';
 import { check } from 'api/authApi';
-import { updateUser } from 'store/main/actions';
+import { updateUserAction } from 'store/main/actions';
 
 class App extends React.Component {
   state = {
@@ -16,7 +16,7 @@ class App extends React.Component {
   async componentDidMount() {
     const user = await check().catch(() => null);
 
-    this.props.updateUser(user);
+    this.props.updateUserAction(user);
     this.setState({ isAuthenticated: true });
 
     if (!user) {
@@ -51,7 +51,7 @@ const connectFunction = connect(
     user: main.user,
   }),
   {
-    updateUser,
+    updateUserAction,
   },
 );
 

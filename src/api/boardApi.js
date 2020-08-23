@@ -2,7 +2,7 @@ import axios from './axios';
 
 const path = 'board';
 
-export const createBoard = (title) => {
+export const createBoardRequest = (title) => {
   return axios({
     url: `/${path}`,
     method: 'POST',
@@ -12,7 +12,7 @@ export const createBoard = (title) => {
   });
 };
 
-export const getBoards = () => {
+export const getBoardsRequest = () => {
   return axios({
     url: `/${path}`,
     method: 'GET',

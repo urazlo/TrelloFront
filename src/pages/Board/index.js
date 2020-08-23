@@ -5,8 +5,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Column from 'ui/components/Column';
-import { createColumn, getColumns, editColumnTitle } from 'api/columnApi';
-import { updateColumns, addColumn, editColumn } from 'store/main/actions';
+import { getColumnsRequest, editColumnRequest, createColumnRequest } from 'api/columnApi';
+import { getCardsRequest } from 'api/cardApi';
+import { updateColumnsAction, addColumnAction, updateCardsAction, editColumnAction } from 'store/main/actions';
 import StyledPage from 'pages/Board/components/StyledPage';
 
 class Board extends React.Component {
@@ -16,17 +17,19 @@ class Board extends React.Component {
   };
 
   async componentDidMount() {
-    const columns = await getColumns(this.props.match.params.id);
-    this.props.updateColumns(columns);
+    const columns = await getColumnsRequest(this.props.match.params.id);
+    this.props.updateColumnsAction(columns);
+    const cards = await getCardsRequest();
+    this.props.updateCardsAction(cards);
   }
 
   addColumn = async () => {
     try {
       const { title } = this.state;
       const boardId = this.props.match.params.id;
-      const column = await createColumn({ title, boardId });
+      const column = await createColumnRequest({ title, boardId });
 
-      this.props.addColumn(column);
+      this.props.addColumnAction(column);
 
       this.setState({ title: '' });
     } catch (err) {
@@ -49,13 +52,11 @@ class Board extends React.Component {
     }
   };
 
-  editColumnTitle = async () => {
+  editColumnTitle = async (columnId, title) => {
     try {
-      const { title } = this.state;
-      const boardId = this.props.match.params.id;
-      const column = await editColumnTitle({ title, boardId });
-
-      this.props.editColumn(column);
+      const userId = this.props.user.id;
+      const column = await editColumnRequest({ userId, title, columnId });
+      this.props.editColumnAction(column);
 
       this.setState({ title: '' });
     } catch (err) {
@@ -139,12 +140,14 @@ class Board extends React.Component {
 
 const connectFunction = connect(
   ({ main }) => ({
+    user: main.user,
     columns: main.columns,
   }),
   {
-    updateColumns,
-    addColumn,
-    editColumn,
+    updateColumnsAction,
+    editColumnAction,
+    updateCardsAction,
+    addColumnAction,
   },
 );
 

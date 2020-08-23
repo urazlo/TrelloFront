@@ -1,16 +1,20 @@
 import {
   UPDATE_USER,
   UPDATE_BOARDS,
-  UPDATE_COLUMNS,
   ADD_BOARD,
   ADD_COLUMN,
+  UPDATE_COLUMNS,
   EDIT_COLUMN,
+  UPDATE_CARDS,
+  ADD_CARD,
+  EDIT_CARD,
 } from './actionNames';
 
 const getInitialStore = () => ({
   user: null,
   boards: null,
   columns: null,
+  cards: [],
 });
 
 export default (
@@ -46,9 +50,39 @@ export default (
     case EDIT_COLUMN:
       return {
         ...store,
-        columns: [...store.columns, data],
-      };
+        columns: store.columns.map(column => {
+          if (column.id === data.id) {
+            return { ...column, title: data.title };
+          }
 
+          return column;
+        }),
+      };
+    case UPDATE_CARDS:
+      return {
+        ...store,
+        cards: data,
+      };
+    // return {
+    //   ...store,
+    //   cards: store.cards.concat(data),
+    // };
+    case ADD_CARD:
+      return {
+        ...store,
+        cards: [...store.cards, data],
+      };
+    case EDIT_CARD:
+      return {
+        ...store,
+        cards: store.cards.map(card => {
+          if (card.id === data.id) {
+            return { ...card, title: data.title };
+          }
+
+          return card;
+        }),
+      };
     default:
       return store;
   }

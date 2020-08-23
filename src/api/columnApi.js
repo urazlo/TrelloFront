@@ -2,7 +2,7 @@ import axios from './axios';
 
 const path = 'column';
 
-export const createColumn = ({ title, boardId }) => {
+export const createColumnRequest = ({ title, boardId }) => {
   return axios({
     url: `/${path}`,
     method: 'POST',
@@ -13,16 +13,20 @@ export const createColumn = ({ title, boardId }) => {
   });
 };
 
-export const getColumns = (boardId) => {
+export const getColumnsRequest = (boardId) => {
   return axios({
     url: `/${path}/${boardId}`,
     method: 'GET',
   });
 };
 
-export const editColumnTitle = (boardId) => {
+export const editColumnRequest = ({ userId, title, columnId }) => {
   return axios({
-    url: `/${path}/${boardId}`,
-    method: 'GET',
+    url: `/${path}/${userId}`,
+    method: 'PATCH',
+    data: {
+      title,
+      columnId,
+    },
   });
 };

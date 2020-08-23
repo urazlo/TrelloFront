@@ -33,9 +33,8 @@ class Card extends React.Component {
 
   render() {
     const { value, showInput } = this.state;
-
     return (
-      <StyledPage>
+      <StyledPage id={this.props.cardId}>
         <div className="card-details">
           <span className="card-details-title">
             {value}

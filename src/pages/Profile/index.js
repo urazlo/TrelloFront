@@ -19,8 +19,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StyledPage from 'pages/Profile/components/StyledPage';
 
-import { updateUser } from 'store/main/actions';
-import { editUser, uploadUserAvatar } from 'api/userApi';
+import { updateUserAction } from 'store/main/actions';
+import { editUserRequest, uploadUserAvatarRequest } from 'api/userApi';
 import defaultAvatar from 'ui/images/avatar.jpg';
 
 class Profile extends React.Component {
@@ -48,9 +48,9 @@ class Profile extends React.Component {
   onAvatarChanger = async (ev) => {
     try {
       const avatar = ev.target.files[0];
-      const user = await uploadUserAvatar(avatar);
+      const user = await uploadUserAvatarRequest(avatar);
 
-      this.props.updateUser(user);
+      this.props.updateUserAction(user);
 
       this.setState({
         avatar: this.props.user?.avatar,
@@ -136,8 +136,8 @@ class Profile extends React.Component {
         }
       }
 
-      const user = await editUser({ id, login, email, password, newPassword });
-      this.props.updateUser(user);
+      const user = await editUserRequest({ id, login, email, password, newPassword });
+      this.props.updateUserAction(user);
 
       this.setState({
         login,
@@ -371,7 +371,7 @@ const connectFunction = connect(
     user: main.user,
   }),
   {
-    updateUser,
+    updateUserAction,
   },
 );
 

@@ -1,39 +1,48 @@
+/* eslint-disable no-console */
+
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { createCardRequest, editCardRequest } from 'api/cardApi';
+import { updateCardsAction, addCardAction, editCardAction } from 'store/main/actions';
 import Card from 'ui/components/Card';
 
-import { cardsStorage, getCardId } from 'utils';
-
 class Column extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columnInputValue: this.props.columnTitle,
-      cards: cardsStorage.get(),
-      cardInputValue: '',
-      showInput: false,
-      showMenu: false,
-    };
-  }
+  state = {
+    columnInputValue: this.props.columnTitle,
+    cardInputValue: '',
+    showInput: false,
+    showMenu: false,
+  };
 
-  updateLocalStorage = () => {
-    cardsStorage.set(this.state.cards);
-  }
+  // async componentDidMount() {
+  //   const cards = await getCards(this.props.columnId);
+  //   this.props.updateCards(cards);
+  //   // let cards = [
+  //   //   { id: 4, columnId: 7, title: 2 },
+  //   //   { id: 5, columnId: 8, title: 3 },
+  //   //   { id: 6, columnId: 9, title: 34 },
+  //   // ];
+  //   // console.log(this.props.columnId);
+  //   // cards.map(card => {
+  //   //   if (card.columnId === this.props.columnId) {
+  //   //     return console.log(card, '1');
+  //   //   }
+  //   // });
+  // }
 
-  addCard = () => {
-    const { cards, cardInputValue } = this.state;
+  addCard = async () => {
+    try {
+      const { cardInputValue } = this.state;
+      const columnId = this.props.columnId;
+      const card = await createCardRequest({ cardInputValue, columnId });
 
-    if (cardInputValue.trim()) {
-      const card = {
-        id: getCardId(),
-        title: cardInputValue.trim(),
-      };
+      this.props.addCardAction(card);
 
-      this.setState({
-        cards: [...cards, card],
-        cardInputValue: '',
-      }, this.updateLocalStorage);
+      this.setState({ cardInputValue: '' });
+    } catch (err) {
+      console.log(err.response.data);
     }
   }
 
@@ -49,13 +58,16 @@ class Column extends React.Component {
     }
   };
 
-  editCardTitle = (id, text) => {
-    const { cards } = this.state;
+  editCardTitle = async (cardId, title) => {
+    try {
+      const userId = this.props.user.id;
+      const card = await editCardRequest({ userId, title, cardId });
+      this.props.editCardAction(card);
 
-    const index = cards.findIndex((card) => card.id === id);
-    cards[index].title = text;
-
-    this.setState({ cards }, this.updateLocalStorage);
+      this.setState({ cardInputValue: '' });
+    } catch (err) {
+      console.log(err.response.data);
+    }
   };
 
   onChangeColumnTitleHandler = (e) => {
@@ -96,7 +108,6 @@ class Column extends React.Component {
 
   render() {
     const {
-      cards,
       columnInputValue,
       cardInputValue,
       showInput,
@@ -105,7 +116,7 @@ class Column extends React.Component {
 
     return (
       <div className="column-wrapper">
-        <StyledPage>
+        <StyledPage id={this.props.columnId}>
           <div
             onClick={this.onHeaderClickHandler}
             className="column-header"
@@ -128,14 +139,21 @@ class Column extends React.Component {
           </div>
 
           <div className="cards-list">
-            {cards.map(({ id, title }) => (
-              <Card
-                key={id}
-                cardId={id}
-                cardTitle={title}
-                editCardTitle={this.editCardTitle}
-              />
-            ))}
+            {
+              this.props.cards !== null && this.props.cards.map(card => {
+                if (card.columnId === this.props.columnId) {
+                  return (
+                    <Card
+                      key={card.id}
+                      cardId={card.id}
+                      cardTitle={card.title}
+                      editCardTitle={this.editCardTitle}
+                    />
+                  );
+                }
+                return null;
+              })
+            }
           </div>
 
           <div className="column-footer">
@@ -332,4 +350,16 @@ const StyledPage = styled.div`
   }
 `;
 
-export default Column;
+const connectFunction = connect(
+  ({ main }) => ({
+    cards: main.cards,
+    user: main.user,
+  }),
+  {
+    updateCardsAction,
+    addCardAction,
+    editCardAction,
+  },
+);
+
+export default connectFunction(Column);

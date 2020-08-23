@@ -2,7 +2,7 @@ import axios from './axios';
 
 const path = 'user';
 
-export const editUser = ({ login, email, id, password, newPassword }) => {
+export const editUserRequest = ({ login, email, id, password, newPassword }) => {
   return axios({
     url: `/${path}/${id}`,
     method: 'PATCH',
@@ -15,7 +15,7 @@ export const editUser = ({ login, email, id, password, newPassword }) => {
   });
 };
 
-export const uploadUserAvatar = (avatar) => {
+export const uploadUserAvatarRequest = (avatar) => {
   const data = new FormData();
   data.append('avatar', avatar);
   return axios({

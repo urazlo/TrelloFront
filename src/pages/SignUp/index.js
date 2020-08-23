@@ -12,7 +12,7 @@ import StyledPage from 'pages/SignUp/components/StyledPage';
 
 import { signUp } from 'api/authApi';
 import { accessToken } from 'utils';
-import { updateUser } from 'store/main/actions';
+import { updateUserAction } from 'store/main/actions';
 
 class SignUp extends React.Component {
   state = {
@@ -52,7 +52,7 @@ class SignUp extends React.Component {
       const { user, token } = await signUp({ login, email, password });
       accessToken.set(token);
 
-      this.props.updateUser(user);
+      this.props.updateUserAction(user);
       this.props.history.push(`/${user.id}`);
     } catch (err) {
       console.log(err.response.data);
@@ -165,7 +165,7 @@ class SignUp extends React.Component {
 const connectFunction = connect(
   null,
   {
-    updateUser,
+    updateUserAction,
   },
 );
 

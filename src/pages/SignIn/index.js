@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 
 import StyledPage from 'pages/SignIn/components/StyledPage';
 
-import { updateUser } from 'store/main/actions';
+import { updateUserAction } from 'store/main/actions';
 import { accessToken } from 'utils';
 import { signIn } from '../../api/authApi';
 
@@ -31,7 +31,7 @@ class SignIn extends React.Component {
       const { user, token } = await signIn({ userName, password });
       accessToken.set(token);
 
-      this.props.updateUser(user);
+      this.props.updateUserAction(user);
       this.props.history.push(`/${user.id}`);
     } catch (err) {
       if (err.response.data === 'Not Found') {
@@ -121,7 +121,7 @@ class SignIn extends React.Component {
 const connectFunction = connect(
   null,
   {
-    updateUser,
+    updateUserAction,
   },
 );
 
