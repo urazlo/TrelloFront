@@ -17,10 +17,6 @@ export default styled.main`
   }
 
   .profile-header-icon{
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 100%;
     height: 48px;
     width: 48px;
     margin-right: 14px;
@@ -101,11 +97,6 @@ export default styled.main`
     height: 100px;
     width: 100px;
     position: relative;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 100%;
-    display: inline-flex;
     cursor: pointer;
     border: 1px solid #00000057;
   }

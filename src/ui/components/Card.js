@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
 class Card extends React.Component {
@@ -34,31 +35,45 @@ class Card extends React.Component {
   render() {
     const { value, showInput } = this.state;
     return (
-      <StyledPage id={this.props.cardId}>
-        <div className="card-details">
-          <span className="card-details-title">
-            {value}
-          </span>
-
-          {showInput && (
-            <input
-              className="card-details-edit"
-              value={value}
-              autoFocus
-              onChange={this.onChangeCardTitleHandler}
-              onKeyDown={this.onCardTitleInputKeyDown}
-              onBlur={this.onBlurHandler}
-            />
-          )}
-
-          <button
-            onClick={this.onClickHandler}
-            className="card-details-edit-button"
+      <Draggable
+        draggableId={String(this.props.cardId)}
+        index={this.props.cardIndex}
+      >
+        {provided => (
+          <StyledPage
+            {...provided.draggableProps}
+            ref={provided.innerRef}
           >
-            #
-          </button>
-        </div>
-      </StyledPage>
+            <div
+              className="card-details"
+              {...provided.dragHandleProps}
+            >
+              <span className="card-details-title">
+                {value}
+              </span>
+
+              {showInput && (
+                <input
+                  className="card-details-edit"
+                  value={value}
+                  autoFocus
+                  onChange={this.onChangeCardTitleHandler}
+                  onKeyDown={this.onCardTitleInputKeyDown}
+                  onBlur={this.onBlurHandler}
+                />
+              )}
+
+              <button
+                onClick={this.onClickHandler}
+                className="card-details-edit-button"
+              >
+                #
+              </button>
+
+            </div>
+          </StyledPage>
+        )}
+      </Draggable>
     );
   }
 }

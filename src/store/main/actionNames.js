@@ -9,3 +9,4 @@ export const EDIT_COLUMN = `${prefix}EDIT_COLUMN`;
 export const UPDATE_CARDS = `${prefix}UPDATE_CARDS`;
 export const ADD_CARD = `${prefix}ADD_CARD`;
 export const EDIT_CARD = `${prefix}EDIT_CARD`;
+export const DRAG_HAPPENED = `${prefix}DRAG_HAPPENED`;

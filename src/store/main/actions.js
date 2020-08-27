@@ -8,6 +8,7 @@ import {
   UPDATE_CARDS,
   ADD_CARD,
   EDIT_CARD,
+  DRAG_HAPPENED,
 } from './actionNames';
 
 export const updateUserAction = (data) => ({
@@ -53,4 +54,23 @@ export const addCardAction = (data) => ({
 export const editCardAction = (data) => ({
   type: EDIT_CARD,
   data,
+});
+
+export const sortAction = (
+  droppableIdStart,
+  droppableIdEnd,
+  droppableIndexStart,
+  droppableIndexEnd,
+  draggableId,
+  type,
+) => ({
+  type: DRAG_HAPPENED,
+  data: {
+    droppableIdStart,
+    droppableIdEnd,
+    droppableIndexEnd,
+    droppableIndexStart,
+    draggableId,
+    type,
+  },
 });

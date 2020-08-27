@@ -32,6 +32,10 @@ class App extends React.Component {
     }
   }
 
+  onDragEnd = () => {
+
+  }
+
   render() {
     const { isAuthenticated } = this.state;
     if (!isAuthenticated) { return null; }

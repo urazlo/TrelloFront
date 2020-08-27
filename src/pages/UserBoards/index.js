@@ -55,13 +55,14 @@ class BorderList extends React.Component {
           </div>
 
           <ul className="boards-section-list">
-            {this.props.boards !== null && this.props.boards.map(({ id, title }) => (
-              <BoardPreview
-                key={id}
-                boardId={id}
-                boardTitle={title}
-              />
-            ))}
+              {this.props.boards !== null && this.props.boards.map(({ id, title }) => (
+                <BoardPreview
+                  key={id}
+                  boardId={id}
+                  boardTitle={title}
+                />
+              ))}
+
             <li className="boards-section-add-board">
               <input
                 className="add-board-input"

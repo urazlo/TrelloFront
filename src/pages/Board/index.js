@@ -5,15 +5,42 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Column from 'ui/components/Column';
+import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+import TextField from '@material-ui/core/TextField';
+
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { getColumnsRequest, editColumnRequest, createColumnRequest } from 'api/columnApi';
 import { getCardsRequest } from 'api/cardApi';
-import { updateColumnsAction, addColumnAction, updateCardsAction, editColumnAction } from 'store/main/actions';
+import { updateColumnsAction, addColumnAction, updateCardsAction, editColumnAction, sortAction } from 'store/main/actions';
 import StyledPage from 'pages/Board/components/StyledPage';
+import StyledMenu from 'pages/Board/components/StyledMenu';
 
 class Board extends React.Component {
   state = {
     title: '',
-    showMenu: false,
+    anchorEl: null,
+  };
+
+  onDragEnd = (result) => {
+    const { destination, source, draggableId, type } = result;
+    console.log('destination', destination);
+    console.log('source', source);
+    console.log('draggableId', draggableId);
+    console.log('type', type);
+
+    if (!destination) {
+      return;
+    }
+
+    this.props.sortAction(
+      source.droppableId,
+      destination.droppableId,
+      source.index,
+      destination.index,
+      draggableId,
+      type,
+    );
   };
 
   async componentDidMount() {
@@ -22,6 +49,14 @@ class Board extends React.Component {
     const cards = await getCardsRequest();
     this.props.updateCardsAction(cards);
   }
+
+  handleClick = (ev) => {
+    this.setState({ anchorEl: ev.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
 
   addColumn = async () => {
     try {
@@ -32,6 +67,7 @@ class Board extends React.Component {
       this.props.addColumnAction(column);
 
       this.setState({ title: '' });
+      this.handleClose();
     } catch (err) {
       console.log(err.response.data);
     }
@@ -44,11 +80,11 @@ class Board extends React.Component {
   onInputKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.addColumn();
-      this.setState({ showMenu: false });
     }
 
     if (e.key === 'Escape') {
-      this.setState({ title: '', showMenu: false });
+      this.setState({ title: '' });
+      this.handleClose();
     }
   };
 
@@ -64,76 +100,82 @@ class Board extends React.Component {
     }
   };
 
-  onMenuClickHandler = () => {
-    this.setState({ showMenu: true });
-  }
-
   onAcceptClickHandler = () => {
     this.addColumn();
-    this.setState({ showMenu: false });
   }
 
   onCancelClickHandler = () => {
-    this.setState({ title: '', showMenu: false });
+    this.setState({ title: '' });
+    this.handleClose();
   }
 
   render() {
-    const { title, showMenu } = this.state;
+    const { title, anchorEl } = this.state;
+
     return (
-      <StyledPage>
-        <div className="board">
-          <div className="column-list-wrapper">
-            {this.props.columns !== null && this.props.columns.map(({ id, title }) => (
-              <Column
-                key={id}
-                columnId={id}
-                columnTitle={title}
-                editColumnTitle={this.editColumnTitle}
-              />
-            ))}
-
-            <div className="column-add-menu column-wrapper">
-              <button
-                className="column-add-menu-open-button"
-                onClick={this.onMenuClickHandler}
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <StyledPage>
+          <Droppable droppableId="all-lists" direction="horizontal" type="column">
+            {provided => (
+              <div
+                className="column-list-wrapper"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
               >
-                <span className="column-add-menu-open-placeholder">
-                  + Add another column
-                </span>
-              </button>
+                {this.props.columns !== null && this.props.columns.map((column, index) => (
+                  <Column
+                    key={column.id}
+                    columnId={column.id}
+                    columnTitle={column.title}
+                    editColumnTitle={this.editColumnTitle}
+                    columnIndex={index}
+                  />
+                ))}
+                {provided.placeholder}
 
-              {showMenu && (
-                <div className="column-add-menu-wrapper">
-                  <input
-                    className="column-add-input"
-                    placeholder="Enter the column title"
+                <Button
+                  className="column-add-menu-open-button"
+                  onClick={this.handleClick}
+                >
+                  <span className="column-add-menu-open-placeholder">
+                    + Add another column
+            </span>
+                </Button>
+
+                <StyledMenu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={this.handleClose}
+                >
+                  <TextField
                     value={title}
-                    autoFocus
+                    variant="outlined"
+                    required
+                    className="column-add-input"
                     onKeyDown={this.onInputKeyDown}
                     onChange={this.onChangeHandler}
                   />
 
                   <div className="column-add">
-                    <button
+                    <Button
                       className="column-add-accept-button"
                       onClick={this.onAcceptClickHandler}
                     >
                       Add column
-                    </button>
+                </Button>
 
-                    <button
+                    <CloseIcon
                       className="column-add-cancel-button"
                       onClick={this.onCancelClickHandler}
-                    >
-                      X
-                    </button>
+                    />
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </StyledPage>
+                </StyledMenu>
+              </div>
+            )}
+          </Droppable>
+        </StyledPage>
+      </DragDropContext>
     );
   }
 }
@@ -148,6 +190,7 @@ const connectFunction = connect(
     editColumnAction,
     updateCardsAction,
     addColumnAction,
+    sortAction,
   },
 );
 

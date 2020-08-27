@@ -4,33 +4,30 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { createCardRequest, editCardRequest } from 'api/cardApi';
 import { updateCardsAction, addCardAction, editCardAction } from 'store/main/actions';
 import Card from 'ui/components/Card';
+import Menu from '@material-ui/core/Menu';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
 
 class Column extends React.Component {
   state = {
     columnInputValue: this.props.columnTitle,
     cardInputValue: '',
     showInput: false,
-    showMenu: false,
+    anchorEl: null,
   };
 
-  // async componentDidMount() {
-  //   const cards = await getCards(this.props.columnId);
-  //   this.props.updateCards(cards);
-  //   // let cards = [
-  //   //   { id: 4, columnId: 7, title: 2 },
-  //   //   { id: 5, columnId: 8, title: 3 },
-  //   //   { id: 6, columnId: 9, title: 34 },
-  //   // ];
-  //   // console.log(this.props.columnId);
-  //   // cards.map(card => {
-  //   //   if (card.columnId === this.props.columnId) {
-  //   //     return console.log(card, '1');
-  //   //   }
-  //   // });
-  // }
+  handleClick = (ev) => {
+    this.setState({ anchorEl: ev.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
 
   addCard = async () => {
     try {
@@ -41,6 +38,7 @@ class Column extends React.Component {
       this.props.addCardAction(card);
 
       this.setState({ cardInputValue: '' });
+      this.handleClose();
     } catch (err) {
       console.log(err.response.data);
     }
@@ -53,9 +51,7 @@ class Column extends React.Component {
   onCardInputKeyDown = (e) => {
     if (e.key === 'Enter') { this.addCard(); }
 
-    if (e.key === 'Escape') {
-      this.setState({ cardInputValue: '' });
-    }
+    if (e.key === 'Escape') { this.setState({ cardInputValue: '' }); }
   };
 
   editCardTitle = async (cardId, title) => {
@@ -93,17 +89,13 @@ class Column extends React.Component {
     this.setState({ showInput: false });
   }
 
-  onMenuClickHandler = () => {
-    this.setState({ showMenu: true });
-  }
-
   onAcceptClickHandler = () => {
     this.addCard();
-    this.setState({ showMenu: false });
   }
 
   onCancelClickHandler = () => {
-    this.setState({ cardInputValue: '', showMenu: false });
+    this.setState({ cardInputValue: '' });
+    this.handleClose();
   }
 
   render() {
@@ -111,94 +103,117 @@ class Column extends React.Component {
       columnInputValue,
       cardInputValue,
       showInput,
-      showMenu,
+      anchorEl,
     } = this.state;
 
     return (
-      <div className="column-wrapper">
-        <StyledPage id={this.props.columnId}>
+      <Draggable
+        draggableId={String(this.props.columnId)}
+        index={this.props.columnIndex}
+      >
+        {provided => (
           <div
-            onClick={this.onHeaderClickHandler}
-            className="column-header"
+            className="column-wrapper"
+            ref={provided.innerRef}
+            {...provided.draggableProps}
           >
-            {columnInputValue}
-            {showInput && (
-              <input
-                autoFocus
-                className="column-header-title-edit"
-                value={columnInputValue}
-                onChange={this.onChangeColumnTitleHandler}
-                onKeyDown={this.onColumnTitleInputKeyDown}
-                onBlur={this.onHeaderBlurHandler}
-              />
-            )}
-
-            <button className="column-header-menu">
-              ...
-            </button>
-          </div>
-
-          <div className="cards-list">
-            {
-              this.props.cards !== null && this.props.cards.map(card => {
-                if (card.columnId === this.props.columnId) {
-                  return (
-                    <Card
-                      key={card.id}
-                      cardId={card.id}
-                      cardTitle={card.title}
-                      editCardTitle={this.editCardTitle}
-                    />
-                  );
-                }
-                return null;
-              })
-            }
-          </div>
-
-          <div className="column-footer">
-            <div className="card-add-menu">
-              <button
-                className="card-add-menu-open-button"
-                onClick={this.onMenuClickHandler}
+            <StyledPage>
+              <div
+                {...provided.dragHandleProps}
+                onClick={this.onHeaderClickHandler}
+                className="column-header"
               >
-                <span className="card-add-menu-placeholder">
-                  + Add another card
-                </span>
-              </button>
-
-              {showMenu && (
-                <div className="card-add-menu-wrapper">
+                {columnInputValue}
+                {showInput && (
                   <input
-                    className="card-add-input"
-                    placeholder="Enter the card title"
                     autoFocus
-                    value={cardInputValue}
-                    onKeyDown={this.onCardInputKeyDown}
-                    onChange={this.onChangeCardTitleHandler}
+                    className="column-header-title-edit"
+                    value={columnInputValue}
+                    onChange={this.onChangeColumnTitleHandler}
+                    onKeyDown={this.onColumnTitleInputKeyDown}
+                    onBlur={this.onHeaderBlurHandler}
                   />
+                )}
 
-                  <div className="card-add-menu">
-                    <button
-                      className="card-add-accept-button"
-                      onClick={this.onAcceptClickHandler}
-                    >
-                      Add card
-                    </button>
+                <button className="column-header-menu">
+                  ...
+                </button>
+              </div>
 
-                    <button
-                      className="card-add-cancel-button"
-                      onClick={this.onCancelClickHandler}
-                    >
-                      Х
-                    </button>
+              <Droppable droppableId='all-cards' type="card">
+                {provided => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    <div className="cards-list">
+                      {this.props.cards !== null && this.props.cards.map((card, index) => {
+                        if (card.columnId === this.props.columnId) {
+                          return (
+                            <Card
+                              key={card.id}
+                              cardId={card.id}
+                              cardTitle={card.title}
+                              editCardTitle={this.editCardTitle}
+                              cardIndex={index}
+                            />
+                          );
+                        }
+                        return null;
+                      })}
+                      {provided.placeholder}
+                    </div>
+
+                    <div className="column-footer">
+                      <div className="card-add-menu">
+                        <button
+                          className="card-add-menu-open-button"
+                          onClick={this.handleClick}
+                        >
+                          <span className="card-add-menu-placeholder">
+                            + Add another card
+                          </span>
+                        </button>
+
+                        <StyledMenu
+                          anchorEl={anchorEl}
+                          keepMounted
+                          open={Boolean(anchorEl)}
+                          onClose={this.handleClose}
+                        >
+                          <TextField
+                            className="card-add-input"
+                            placeholder="Enter the card title"
+                            value={cardInputValue}
+                            onKeyDown={this.onCardInputKeyDown}
+                            onChange={this.onChangeCardTitleHandler}
+                            variant="outlined"
+                            required
+                          />
+
+                          <div className="card-add-menu">
+                            <Button
+                              className="card-add-menu-accept-button"
+                              onClick={this.onAcceptClickHandler}
+                            >
+                              Add card
+                            </Button>
+
+                            <CloseIcon
+                              className="card-add-menu-cancel-button"
+                              onClick={this.onCancelClickHandler}
+                            />
+                          </div>
+                        </StyledMenu>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </Droppable>
+            </StyledPage>
           </div>
-        </StyledPage>
-      </div>
+        )}
+      </Draggable>
     );
   }
 }
@@ -286,8 +301,10 @@ const StyledPage = styled.div`
 
   .card-add-menu-placeholder{}
 
+`;
+
+const StyledMenu = styled(Menu)`
   .card-add-input{
-    background: #fff;
     display: block;
     margin: 0;
     padding: 5px;
@@ -296,40 +313,25 @@ const StyledPage = styled.div`
     outline: none;
     border: 1px solid transparent;
     border-radius: 3px; 
-
+  
     &:focus{
       outline: none;
       border: 1px solid rgba(251, 106, 3, 0.64);
       border-radius: 3px;
     }
   }
-
-  .card-add-menu-wrapper{
-    width: 252px;
-    background-color: #ebecf0;
-    min-height: 32px;
+  
+  .card-add-menu{
     display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 5px;
+    margin: 4px;
   }
 
-  .card-add-menu{}
-
-  .card-add-accept-button{
-    margin-top: 5px;
+  .card-add-menu-accept-button{
     background-color: #5aac44;
-    box-shadow: none;
     border: none;
     color: #fff;
-    float: left;
-    min-height: 32px;
     height: 32px;
-    padding: 4px 0;
     font-size: 18px;
-    padding: 5px;
     cursor: pointer;
 
     &:hover{
@@ -337,16 +339,19 @@ const StyledPage = styled.div`
     }
   }
 
-  .card-add-cancel-button{
-    margin-top: 5px;
-    float: right;
-    font-size: 20px;
-    padding: 5px;
+  .card-add-menu-cancel-button{
+    font-size: 30px;
     cursor: pointer;
+    color: #6b778c;
+    margin-left: 10px;
 
-    &:hover{
-      background-color: rgba(9,30,66,.13);
-    }
+      &:hover{
+        color: #000;
+      }
+  }
+  
+  input{
+    padding: 7px;
   }
 `;
 

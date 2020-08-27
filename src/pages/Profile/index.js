@@ -13,6 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 import LockIcon from '@material-ui/icons/Lock';
 import InfoIcon from '@material-ui/icons/Info';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -21,7 +22,6 @@ import StyledPage from 'pages/Profile/components/StyledPage';
 
 import { updateUserAction } from 'store/main/actions';
 import { editUserRequest, uploadUserAvatarRequest } from 'api/userApi';
-import defaultAvatar from 'ui/images/avatar.jpg';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -209,9 +209,9 @@ class Profile extends React.Component {
     return (
       <StyledPage>
         <div className="profile-header">
-          <img
+          <Avatar
             className="profile-header-icon"
-            src={avatar || defaultAvatar}
+            src={avatar}
             alt="avatar"
           />
 
@@ -330,9 +330,9 @@ class Profile extends React.Component {
             <div className="profile-content-avatar">
               <span className="profile-content-avatar-text">Avatar</span>
 
-              <img
+              <Avatar
                 className="profile-content-avatar-img"
-                src={avatar || defaultAvatar}
+                src={avatar}
                 alt="avatar"
               />
 

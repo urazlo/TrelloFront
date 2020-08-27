@@ -8,6 +8,7 @@ import {
   UPDATE_CARDS,
   ADD_CARD,
   EDIT_CARD,
+  DRAG_HAPPENED,
 } from './actionNames';
 
 const getInitialStore = () => ({
@@ -63,10 +64,6 @@ export default (
         ...store,
         cards: data,
       };
-    // return {
-    //   ...store,
-    //   cards: store.cards.concat(data),
-    // };
     case ADD_CARD:
       return {
         ...store,
@@ -83,6 +80,24 @@ export default (
           return card;
         }),
       };
+    case DRAG_HAPPENED: {
+      const {
+        droppableIndexEnd,
+        droppableIndexStart,
+        type,
+      } = data;
+
+      if (type === 'column') {
+        const pulledOutColumn = store.columns.splice(droppableIndexStart, 1);
+        store.columns.splice(droppableIndexEnd, 0, ...pulledOutColumn);
+
+        return {
+          ...store,
+          columns: [...store.columns],
+        };
+      }
+      return store;
+    }
     default:
       return store;
   }

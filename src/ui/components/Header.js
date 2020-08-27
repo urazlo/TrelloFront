@@ -12,6 +12,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import CloseIcon from '@material-ui/icons/Close';
 import Menu from '@material-ui/core/Menu';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -19,7 +20,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import unauthorizedLogoImage from 'ui/images/trello-logo-black.svg';
 import authorizedLogoImage from 'ui/images/logo.png';
-import defaultAvatar from 'ui/images/avatar.jpg';
 
 import { updateUserAction } from 'store/main/actions';
 
@@ -114,10 +114,10 @@ class Header extends React.Component {
             <AddIcon className="header-button-icon" />
           </div>
 
-          <img
+          <Avatar
             onClick={this.handleClick}
             className="account-icon"
-            src={this.props.user?.avatar || defaultAvatar}
+            src={this.props.user?.avatar}
             alt="avatar"
           />
 
@@ -138,8 +138,8 @@ class Header extends React.Component {
               divider={true}
             >
               <div className="header-menu-info">
-                <img
-                  src={this.props.user?.avatar || defaultAvatar}
+                <Avatar
+                  src={this.props.user?.avatar}
                   alt="avatar"
                   className="header-menu-info-avatar"
                 />
@@ -270,11 +270,6 @@ const AuthorizedHeaderStyle = styled.div`
   }
 
   .account-icon{
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 100%;
-    display: inline-flex;
     height: 32px;
     cursor: pointer;
     width: 32px;
@@ -358,17 +353,7 @@ const StyledMenu = styled(Menu)`
 
   .header-menu-info{
     display: flex;
-  }
-
-  .header-menu-info-avatar{
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 100%;
-    display: inline-flex;
-    height: 40px;
-    width: 40px;
-    padding: 4px 8px 4px 12px;
+    margin-left: 10px;
   }
 
   .header-menu-info-email{
@@ -377,10 +362,12 @@ const StyledMenu = styled(Menu)`
     display: block;
     text-overflow: ellipsis;
     overflow: hidden;
+    margin-left: 10px;
   }
 
   .header-menu-info-login{
     margin-top: 4px;
+    margin-left: 10px;
   }
 
   .header-menu-close-button{
